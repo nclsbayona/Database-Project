@@ -148,7 +148,7 @@ CREATE OR REPLACE VIEW MULTAS_ANIO AS (
 );
 --SELECT * FROM MULTAS_ANIO;
 --
---1.Produzca un listado que contenga nombre y cedula del conductor, placa del carro, fecha y valor de la multa, ordenado por cedula y placa.
+--CONSULTA 1.Produzca un listado que contenga nombre y cedula del conductor, placa del carro, fecha y valor de la multa, ordenado por cedula y placa.
 SELECT CO.NOMBRE AS NOMBRE, CO.CEDULA AS CEDULA, CA.PLACA AS PLACA_DEL_CARRO, M.FECHA AS FECHA, M.MULTA AS VALOR_DE_LA_MULTA
 FROM CARRO CA, CONDUCTOR CO, MULTA M
 WHERE CO.ID=M.IDCONDUCTOR AND CA.ID=M.IDCARRO
@@ -182,7 +182,7 @@ SELECT V.PLACA AS PLACA, V.MES AS MES,V.ANIO AS ANIO, V.VALOR_MULTA AS TOTAL
 FROM MES_ANIO  V
 ORDER BY ANIO,MES,PLACA;
 
---7.Actualice la columna ACTIVO de CARRO teniendo en cuenta que se debe asignar ‘NO’ a la columna si:
+--CONSULTA 7.Actualice la columna ACTIVO de CARRO teniendo en cuenta que se debe asignar ‘NO’ a la columna si:
 --a.El carro(s) es el que tiene el mayor número de multas.
 CREATE OR REPLACE VIEW MULTAS_POR_CARRO AS(
     SELECT IDCARRO, COUNT(*) AS TOT
