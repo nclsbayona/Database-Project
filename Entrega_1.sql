@@ -119,10 +119,10 @@ VALUES (5, 1, 50000,TO_DATE('17/11/2015', 'DD/MM/YYYY'));
 
 /*¿Cuál es el valor total de multas por año? La vista debe tener el año y el valor total de multas
 Utilice la opción EXTRACT(year from fecha) para extraer el año. Asegúrese que en el resultado aparezcan filas de diferentes años*/
-CREATE OR REPLACE VIEW MULTAS_ANIO_MES_ELECTRICOS AS (
+CREATE OR REPLACE VIEW MULTAS_ANIO_MES AS (
    SELECT EXTRACT(YEAR FROM MULTA.FECHA) AS ANIO, SUM(VALOR) AS VALOR_TOTAL
    FROM MULTA
-   GROUP BY EXTRACT(YEAR FROM MULTA.FECHA
+   GROUP BY EXTRACT(YEAR FROM MULTA.FECHA)
 );
 
 --SELECT * FROM MULTAS_ANIO_MES_NOELECTRICOS;
