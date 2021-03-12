@@ -119,6 +119,28 @@ VALUES (5, 1, 50000,TO_DATE('17/11/2015', 'DD/MM/YYYY'));
 
 /*¿Cuál es el valor total de multas por año? La vista debe tener el año y el valor total de multas
 Utilice la opción EXTRACT(year from fecha) para extraer el año. Asegúrese que en el resultado aparezcan filas de diferentes años*/
+CREATE OR REPLACE VIEW MULTAS_ANIO_MES_ELECTRICOS AS (
+   SELECT EXTRACT(YEAR FROM MULTA.FECHA) AS ANIO, SUM(VALOR) AS VALOR_TOTAL
+   FROM MULTA
+   GROUP BY EXTRACT(YEAR FROM MULTA.FECHA
+);
+
+--SELECT * FROM MULTAS_ANIO_MES_NOELECTRICOS;
+
+--¿Cuál es el valor total de las multas de un año, mes para los carros eléctricos?La vista debe tener las columnas año, mes, valor total multas
+CREATE OR REPLACE VIEW ANIO_MES_VALOR_ELECTRICOS AS(
+    SELECT EXTRACT(YEAR FROM MULTA.FECHA) AS ANIO, EXTRACT(MONTH FROM MULTA.FECHA) AS MES, MULTA.MULTA AS VALOR
+    FROM MULTA, CARRO 
+    WHERE CARRO.ID=MULTA.IDCARRO AND CARRO.ELECTRICO='SI'
+);
+CREATE OR REPLACE VIEW MULTAS_ANIO_MES_ELECTRICOS AS (
+   SELECT ANIO, MES, SUM(VALOR) AS VALOR_TOTAL
+   FROM ANIO_MES_VALOR_ELECTRICOS
+   GROUP BY ANIO, MES
+);
+
+--SELECT * FROM MULTAS_ANIO_MES_ELECTRICOS;
+--¿Cuál es el valor total de las multas de un año, mes para los carros no eléctricos?La vista debe tener las columnas año, mes, valor total multas
 CREATE OR REPLACE VIEW ANIO_MES_VALOR_NOELECTRICOS AS(
     SELECT EXTRACT(YEAR FROM MULTA.FECHA) AS ANIO, EXTRACT(MONTH FROM MULTA.FECHA) AS MES, MULTA.MULTA AS VALOR
     FROM MULTA, CARRO 
@@ -128,23 +150,6 @@ CREATE OR REPLACE VIEW MULTAS_ANIO_MES_NOELECTRICOS AS (
    SELECT ANIO, MES, SUM(VALOR) AS VALOR_TOTAL
    FROM ANIO_MES_VALOR_NOELECTRICOS
    GROUP BY ANIO, MES
-);
-
---SELECT * FROM MULTAS_ANIO_MES_NOELECTRICOS;
-
---¿Cuál es el valor total de las multas de un año, mes para los carros eléctricos?La vista debe tener las columnas año, mes, valor total multas
-CREATE OR REPLACE VIEW MULTAS_ANIO_MES AS (
-   SELECT EXTRACT(YEAR FROM FECHA) AS ANIO, EXTRACT(MONTH FROM FECHA) AS MES,  SUM(MULTA) AS VALOR_TOTAL
-   FROM MULTA
-   GROUP BY EXTRACT(YEAR FROM FECHA), EXTRACT(MONTH FROM FECHA)
-);
-
---SELECT * FROM MULTAS_ANIO_MES;
---¿Cuál es el valor total de las multas de un año, mes para los carros no eléctricos?La vista debe tener las columnas año, mes, valor total multas
-CREATE OR REPLACE VIEW MULTAS_ANIO AS (
-    SELECT ANIO AS ANIO, SUM(VALOR_TOTAL) AS VALOR_TOTAL
-    FROM MULTAS_ANIO_MES
-    GROUP BY ANIO
 );
 --SELECT * FROM MULTAS_ANIO;
 --
