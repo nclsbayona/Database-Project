@@ -119,7 +119,5 @@ public class Parametro implements Serializable {
     @Override
     public String toString() {
         return "Parametro{" + "cantidadCarros=" + cantidadCarros + ", porcentaje=" + porcentaje + ", id=" + id+'}';
-    }
-
-    
+    }   
 }

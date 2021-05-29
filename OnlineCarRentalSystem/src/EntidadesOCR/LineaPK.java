@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 /**
  *
@@ -20,6 +22,7 @@ public class LineaPK implements Serializable {
     @Basic(optional = false)
     @Column(name = "RENTAID")
     private int rentaid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private int id;
@@ -27,9 +30,8 @@ public class LineaPK implements Serializable {
     public LineaPK() {
     }
 
-    public LineaPK(int rentaid, int id) {
+    public LineaPK(int rentaid) {
         this.rentaid = rentaid;
-        this.id = id;
     }
 
     public int getRentaid() {

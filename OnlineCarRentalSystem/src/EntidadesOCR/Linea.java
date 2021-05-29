@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Linea.findByRentaid", query = "SELECT l FROM Linea l WHERE l.lineaPK.rentaid = :rentaid"),
     @NamedQuery(name = "Linea.findById", query = "SELECT l FROM Linea l WHERE l.lineaPK.id = :id")})
 public class Linea implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected LineaPK lineaPK;
@@ -47,13 +46,19 @@ public class Linea implements Serializable {
     public Linea() {
     }
 
-    public Linea(int rentaid, int id, int cantidad) {
-        this.lineaPK = new LineaPK(rentaid, id);
+    public Linea(int rentaid, int cantidad) {
+        this.lineaPK = new LineaPK(rentaid);
+        this.cantidad = cantidad;
+    }
+    
+    public Linea(Carro carroid, int rentaid, int cantidad) {
+        this.carroid=carroid;
+        this.lineaPK = new LineaPK(rentaid);
         this.cantidad = cantidad;
     }
 
-    public Linea(int rentaid, int id) {
-        this.lineaPK = new LineaPK(rentaid, id);
+    public Linea(int rentaid) {
+        this.lineaPK = new LineaPK(rentaid);
     }
 
     public LineaPK getLineaPK() {
@@ -120,6 +125,4 @@ public class Linea implements Serializable {
     public String toString() {
         return "Linea{" + lineaPK + ", cantidad=" + cantidad + ", carroid=" + carroid + ", renta=" + renta + '}';
     }
-
-    
 }

@@ -33,7 +33,7 @@ public class CarroJpaController implements Serializable {
     public CarroJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    
+
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("OnlineCarRentalPU");
 
     public EntityManager getEntityManager() {
@@ -193,6 +193,22 @@ public class CarroJpaController implements Serializable {
         }
     }
 
+    public boolean carExists(Integer id) {
+        try {
+            return getEntityManager().find(Carro.class, id) != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean carAvailable(Integer id) {
+        try {
+            return getEntityManager().find(Carro.class, id).getUnidadesdisponibles() > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public int getCarroCount() {
         EntityManager em = getEntityManager();
         try {
@@ -205,5 +221,5 @@ public class CarroJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
