@@ -140,11 +140,12 @@ public class FacadeOCR {
 
             } else {
                 try {
-                    this.lineaControl.create(l.getObj());
-                    the_renta.getLineaCollection().add(l.getObj());
+                    System.out.println("NegocioOCR.FacadeOCR.agregarLinea()");
                     double total_renta=0;
                     double total_ingresado=0;
                     double saldo_vueltos;
+                    this.lineaControl.create(l.getObj());
+                    System.out.println(l.getObj());
                     for (Iterator<Linea> it = the_renta.getLineaCollection().iterator(); it.hasNext();) {
                         Linea line = it.next();
                         total_renta+=(line.getCantidad()*line.getCarroid().getPrecio());
