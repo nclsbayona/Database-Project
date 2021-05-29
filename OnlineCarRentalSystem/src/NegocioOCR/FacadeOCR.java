@@ -96,11 +96,11 @@ public class FacadeOCR {
     }
     
     public DTOresumen crearRenta(DTO<Renta> objetoRenta){
-        DTOresumen dtoresumen=new DTOresumen();
+        DTOresumen dtoresumen;
         if (this.consultarCantidadCarros()==0)
-            dtoresumen.setMensaje("No existen carros en el sistema!");
+            dtoresumen=new DTOresumen("No existen carros en el sistema!");
         else if (this.consultarCantidadCarrosDisponibles()==0)
-            dtoresumen.setMensaje("No existen carros disponibles!");
+            dtoresumen=new DTOresumen("No existen carros disponibles!");
         else{
             int parametroID=1;
             Query query=(this.parametroControl.getEntityManager().createNativeQuery("SELECT * FROM PARAMETRO WHERE ID=?", Parametro.class));
@@ -110,6 +110,7 @@ public class FacadeOCR {
             Renta renta=new Renta(numero_renta, new Date(), parametro);
             this.rentaControl.create(renta);
             objetoRenta.setObj(renta);
+            dtoresumen=new DTOresumen(null, 0, 0, 0);
         }
         return dtoresumen;
     }

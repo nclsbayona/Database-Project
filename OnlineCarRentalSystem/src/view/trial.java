@@ -19,7 +19,7 @@ public class trial {
     public static void main(String[] args) {
         FacadeOCR focr=new FacadeOCR();
         DTO<Renta> dto=new DTO<>(new Renta());
-        Renta renta;
+        Renta renta_actual;
         for (Carro c:focr.consultarCarros())
                 System.out.println(c);
         System.out.println();
@@ -27,7 +27,7 @@ public class trial {
                 System.out.println(db);
         System.out.println(focr.consultarCantidadCarros()+" -- "+focr.consultarCantidadCarrosDisponibles());
         System.out.println(focr.crearRenta(dto));
-        renta=dto.getObj();
-        System.out.println(renta);
+        renta_actual=dto.getObj();
+        System.out.println(renta_actual);
     }
 }

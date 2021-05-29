@@ -68,5 +68,16 @@ public class DTOresumen {
             ret="DTOresumen{" + "lineas=" + lineas + ", total_renta=" + total_renta + ", saldo_ingresados=" + saldo_ingresados + ", cantidad_vueltos=" + cantidad_vueltos + '}';
         return ret;
     }
+
+    public DTOresumen(Collection<Linea> lineas, double total_renta, int saldo_ingresados, int cantidad_vueltos) {
+        this.lineas = lineas;
+        this.total_renta = total_renta;
+        this.saldo_ingresados = saldo_ingresados;
+        this.cantidad_vueltos = cantidad_vueltos;
+    }
+
+    public DTOresumen(String mensaje) {
+        this.mensaje = mensaje;
+    }
     
 }

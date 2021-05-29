@@ -16,6 +16,8 @@ import javafx.stage.Stage;
  */
 public class PantallaOCR extends Application {
     
+    private ControlEventosOCR control;
+    
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("PantallaPrincipal.fxml"));
@@ -31,6 +33,14 @@ public class PantallaOCR extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public ControlEventosOCR getControl() {
+        return control;
+    }
+
+    public void setControl(ControlEventosOCR control) {
+        this.control = control;
     }
     
 }

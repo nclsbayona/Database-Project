@@ -160,7 +160,7 @@ public class Renta implements Serializable {
             ret+= ", lineaCollection=";
             ret = lineaCollection.stream().map(linea -> (linea.toString()+' '+',')).reduce(ret, String::concat);
         }
-        ret=ret+", parametroid=" + parametroid.toString()+ '}';
+        ret=ret+", parametro=" + parametroid.toString()+ '}';
         return ret;
     }
 }
