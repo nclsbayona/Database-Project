@@ -152,15 +152,15 @@ public class Renta implements Serializable {
     @Override
     public String toString() {
         String ret="Renta{" + "numero=" + numero + ", fechahora=" + fechahora + ", id=" + id;
-        if (rentaxbilleteCollection!=null){
+        if (rentaxbilleteCollection!=null&&rentaxbilleteCollection.size()>0){
             ret+= ", rentaxbilleteCollection=";
             ret = rentaxbilleteCollection.stream().map(rentaxb -> (rentaxb.toString()+' '+',')).reduce(ret, String::concat);
         }
-        if (lineaCollection!=null){
+        if (lineaCollection!=null&&lineaCollection.size()>0){
             ret+= ", lineaCollection=";
             ret = lineaCollection.stream().map(linea -> (linea.toString()+' '+',')).reduce(ret, String::concat);
         }
-        ret+=(", parametroid=" + parametroid.toString() + '}');
+        ret=ret+", parametroid=" + parametroid.toString()+ '}';
         return ret;
     }
 }

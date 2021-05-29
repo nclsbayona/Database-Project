@@ -18,7 +18,7 @@ import EntidadesOCR.classes.DTO;
 public class trial {
     public static void main(String[] args) {
         FacadeOCR focr=new FacadeOCR();
-        DTO<Renta> dto=new DTO<>();
+        DTO<Renta> dto=new DTO<>(new Renta());
         Renta renta;
         for (Carro c:focr.consultarCarros())
                 System.out.println(c);
@@ -28,5 +28,6 @@ public class trial {
         System.out.println(focr.consultarCantidadCarros()+" -- "+focr.consultarCantidadCarrosDisponibles());
         System.out.println(focr.crearRenta(dto));
         renta=dto.getObj();
+        System.out.println(renta);
     }
 }
