@@ -129,8 +129,6 @@ public class FacadeOCR {
         } else if (!this.carroControl.carAvailable(l.getObj().getCarroid().getId())) {
             dtoresumen = new DTOresumen("No existen unidades de este carro disponibles en el catalogo");
         } else {
-            //SE SUPONE QUE SE AGREGA? PERO WHAT? OSEA, NO QUE YO NO CONOZCO LA RENTA, SOLO LA LINEA? OSEA, QUIEREN QUE BUSQUE LA RENTA?
-            //NO ENTIENDO CUAL VALOR, ESO NO ES EN RENTA?
             Query query;
             query = (this.rentaControl.getEntityManager().createNativeQuery("SELECT * FROM RENTA WHERE ID=?", Renta.class));
             query.setParameter(1, (l.getObj().getRentaid()));
@@ -144,7 +142,9 @@ public class FacadeOCR {
                     double total_renta=0;
                     double total_ingresado=0;
                     double saldo_vueltos;
-                    this.lineaControl.create(l.getObj());
+                    Linea linea=l.getObj();
+                    this.lineaControl.create(linea);
+                    l.setObj(linea);
                     System.out.println(l.getObj());
                     for (Iterator<Linea> it = the_renta.getLineaCollection().iterator(); it.hasNext();) {
                         Linea line = it.next();
