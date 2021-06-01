@@ -3,16 +3,20 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" fx:id="mainWindow" prefHeight="468.0" prefWidth="793.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" fx:controller="PresentacionOCR.ControlEventosOCR">
+<AnchorPane id="AnchorPane" fx:id="mainWindow" prefHeight="468.0" prefWidth="793.0" style="-fx-background-color: #0B1E33;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" fx:controller="PresentacionOCR.ControlEventosOCR">
     <children>
-        <Button fx:id="crear_renta_btn" layoutX="51.0" layoutY="39.0" onAction="#crear_renta" text="Crear renta" />
-      <Text layoutX="330.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Renta actual" textAlignment="CENTER" wrappingWidth="267.13671875" />
-      <Text fx:id="renta_actual_txt" layoutX="204.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="544.13671875" />
+        <Button fx:id="crear_renta_btn" layoutX="51.0" layoutY="20.0" onAction="#crear_renta" prefHeight="96.0" prefWidth="119.0" style="-fx-background-color: #0B1E0F;" text="Crear renta" textFill="WHITE" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true">
+         <font>
+            <Font name="Consolas" size="28.0" />
+         </font></Button>
+      <Text fill="WHITE" layoutX="330.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Renta actual" textAlignment="CENTER" wrappingWidth="267.13671875" />
+      <Text fx:id="renta_actual_txt" fill="WHITE" layoutX="204.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="544.13671875" />
       <ListView fx:id="carros_list_view" layoutX="35.0" layoutY="134.0" prefHeight="227.0" prefWidth="351.0" />
       <ListView fx:id="tipo_billete_list_view" layoutX="412.0" layoutY="134.0" prefHeight="227.0" prefWidth="351.0" />
-      <Button fx:id="aniadir_carro_btn" layoutX="170.0" layoutY="374.0" onAction="#aniadir_carro" text="Añadir carro" />
-      <Button fx:id="aniadir_tipo_billete_btn" layoutX="532.0" layoutY="374.0" onAction="#aniadir_billete" text="Añadir tipo billete" />
+      <Button fx:id="aniadir_carro_btn" layoutX="170.0" layoutY="374.0" onAction="#aniadir_carro" style="-fx-background-color: #0B1E0F;" text="Añadir carro" textFill="WHITE" />
+      <Button fx:id="aniadir_tipo_billete_btn" layoutX="532.0" layoutY="374.0" onAction="#aniadir_billete" style="-fx-background-color: #0B1E0F;" text="Añadir tipo billete" textFill="WHITE" />
     </children>
 </AnchorPane>
