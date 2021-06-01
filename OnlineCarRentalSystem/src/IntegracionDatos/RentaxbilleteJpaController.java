@@ -5,21 +5,21 @@
  */
 package IntegracionDatos;
 
-import IntegracionDatos.exceptions.NonexistentEntityException;
-import IntegracionDatos.exceptions.PreexistingEntityException;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import EntidadesOCR.Denominacionbillete;
 import EntidadesOCR.Renta;
 import EntidadesOCR.Rentaxbillete;
 import EntidadesOCR.RentaxbilletePK;
+import IntegracionDatos.exceptions.NonexistentEntityException;
+import IntegracionDatos.exceptions.PreexistingEntityException;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -27,13 +27,13 @@ import EntidadesOCR.RentaxbilletePK;
  */
 public class RentaxbilleteJpaController implements Serializable {
 
-    public RentaxbilleteJpaController() {
-    }
-
     public RentaxbilleteJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("OnlineCarRentalPU");
+
+    public RentaxbilleteJpaController() {
+    }
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -43,8 +43,8 @@ public class RentaxbilleteJpaController implements Serializable {
         if (rentaxbillete.getRentaxbilletePK() == null) {
             rentaxbillete.setRentaxbilletePK(new RentaxbilletePK());
         }
-        rentaxbillete.getRentaxbilletePK().setDenominacionbilleteid(rentaxbillete.getDenominacionbillete().getId());
         rentaxbillete.getRentaxbilletePK().setRentaid(rentaxbillete.getRenta().getId());
+        rentaxbillete.getRentaxbilletePK().setDenominacionbilleteid(rentaxbillete.getDenominacionbillete().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -82,8 +82,8 @@ public class RentaxbilleteJpaController implements Serializable {
     }
 
     public void edit(Rentaxbillete rentaxbillete) throws NonexistentEntityException, Exception {
-        rentaxbillete.getRentaxbilletePK().setDenominacionbilleteid(rentaxbillete.getDenominacionbillete().getId());
         rentaxbillete.getRentaxbilletePK().setRentaid(rentaxbillete.getRenta().getId());
+        rentaxbillete.getRentaxbilletePK().setDenominacionbilleteid(rentaxbillete.getDenominacionbillete().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -211,5 +211,5 @@ public class RentaxbilleteJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

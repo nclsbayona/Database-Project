@@ -6,8 +6,9 @@
 package EntidadesOCR;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -54,9 +55,9 @@ public class Renta implements Serializable {
     @Column(name = "ID")
     private Integer id;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "renta")
-    private Collection<Rentaxbillete> rentaxbilleteCollection;
+    private List<Rentaxbillete> rentaxbilleteCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "renta")
-    private Collection<Linea> lineaCollection;
+    private List<Linea> lineaCollection;
     @JoinColumn(name = "PARAMETROID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Parametro parametroid;
@@ -104,20 +105,20 @@ public class Renta implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Rentaxbillete> getRentaxbilleteCollection() {
+    public List<Rentaxbillete> getRentaxbilleteCollection() {
         return rentaxbilleteCollection;
     }
 
-    public void setRentaxbilleteCollection(Collection<Rentaxbillete> rentaxbilleteCollection) {
+    public void setRentaxbilleteCollection(List<Rentaxbillete> rentaxbilleteCollection) {
         this.rentaxbilleteCollection = rentaxbilleteCollection;
     }
 
     @XmlTransient
-    public Collection<Linea> getLineaCollection() {
+    public List<Linea> getLineaCollection() {
         return lineaCollection;
     }
 
-    public void setLineaCollection(Collection<Linea> lineaCollection) {
+    public void setLineaCollection(List<Linea> lineaCollection) {
         this.lineaCollection = lineaCollection;
     }
 
@@ -151,16 +152,18 @@ public class Renta implements Serializable {
 
     @Override
     public String toString() {
-        String ret="Renta{" + "numero=" + numero + ", fechahora=" + fechahora + ", id=" + id;
-        if (rentaxbilleteCollection!=null&&rentaxbilleteCollection.size()>0){
-            ret+= ", rentaxbilleteCollection=";
-            ret = rentaxbilleteCollection.stream().map(rentaxb -> (rentaxb.toString()+' '+',')).reduce(ret, String::concat);
-        }
-        if (lineaCollection!=null&&lineaCollection.size()>0){
-            ret+= ", lineaCollection=";
-            ret = lineaCollection.stream().map(linea -> (linea.toString()+' '+',')).reduce(ret, String::concat);
-        }
-        ret=ret+", parametro=" + parametroid.toString()+ '}';
+        String ret = "Renta{" + "numero=" + numero + ", fechahora=" + fechahora + ", id=" + id;
+        ret += ", rentaxbilleteCollectionSize=";
+        ret += String.valueOf(rentaxbilleteCollection.size());
+        ret += ", lineaCollectionSize=";
+        ret += String.valueOf(lineaCollection.size());
+        ret = ret + ", parametro=" + parametroid.toString() + '}';
         return ret;
+    }
+
+    public void add(Linea linea) {
+        if (this.lineaCollection==null)
+            this.lineaCollection=new ArrayList<Linea>();
+        this.lineaCollection.add(linea);
     }
 }

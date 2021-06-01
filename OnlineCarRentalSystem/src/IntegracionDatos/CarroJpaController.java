@@ -5,21 +5,21 @@
  */
 package IntegracionDatos;
 
-import IntegracionDatos.exceptions.IllegalOrphanException;
-import IntegracionDatos.exceptions.NonexistentEntityException;
+import EntidadesOCR.Carro;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import EntidadesOCR.Linea;
+import IntegracionDatos.exceptions.IllegalOrphanException;
+import IntegracionDatos.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import EntidadesOCR.Carro;
 
 /**
  *
@@ -27,14 +27,13 @@ import EntidadesOCR.Carro;
  */
 public class CarroJpaController implements Serializable {
 
-    public CarroJpaController() {
-    }
-
     public CarroJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("OnlineCarRentalPU");
+
+    public CarroJpaController() {
+    }
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -193,22 +192,6 @@ public class CarroJpaController implements Serializable {
         }
     }
 
-    public boolean carExists(Integer id) {
-        try {
-            return getEntityManager().find(Carro.class, id) != null;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public boolean carAvailable(Integer id) {
-        try {
-            return getEntityManager().find(Carro.class, id).getUnidadesdisponibles() > 0;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     public int getCarroCount() {
         EntityManager em = getEntityManager();
         try {
@@ -222,4 +205,12 @@ public class CarroJpaController implements Serializable {
         }
     }
 
+    public boolean carExists(Integer id) {
+        return getEntityManager().find (Carro.class, id)!=null;
+    }
+
+    public boolean carAvailable(Integer id) {
+        return getEntityManager().find (Carro.class, id).getUnidadesdisponibles()>0;
+    }
+    
 }

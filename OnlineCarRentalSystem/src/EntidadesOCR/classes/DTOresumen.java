@@ -5,7 +5,7 @@
  */
 package EntidadesOCR.classes;
 
-import java.util.Collection;
+import java.util.List;
 import EntidadesOCR.Linea;
 
 /**
@@ -14,7 +14,7 @@ import EntidadesOCR.Linea;
  */
 public class DTOresumen {
     private String mensaje;
-    private Collection<Linea> lineas;
+    private List<Linea> lineas;
     private double total_renta;
     private double saldo_ingresados;
     private double cantidad_vueltos;
@@ -27,11 +27,11 @@ public class DTOresumen {
         this.mensaje = mensaje;
     }
 
-    public Collection<Linea> getLineas() {
+    public List<Linea> getLineas() {
         return lineas;
     }
 
-    public void setLineas(Collection<Linea> lineas) {
+    public void setLineas(List<Linea> lineas) {
         this.lineas = lineas;
     }
 
@@ -69,7 +69,7 @@ public class DTOresumen {
         return ret;
     }
 
-    public DTOresumen(Collection<Linea> lineas, double total_renta, double saldo_ingresados, double cantidad_vueltos) {
+    public DTOresumen(List<Linea> lineas, double total_renta, double saldo_ingresados, double cantidad_vueltos) {
         this.lineas = lineas;
         this.total_renta = total_renta;
         this.saldo_ingresados = saldo_ingresados;

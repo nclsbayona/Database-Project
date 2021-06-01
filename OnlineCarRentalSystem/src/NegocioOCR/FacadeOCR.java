@@ -138,29 +138,43 @@ public class FacadeOCR {
 
             } else {
                 try {
-                    System.out.println("NegocioOCR.FacadeOCR.agregarLinea()");
-                    double total_renta=0;
-                    double total_ingresado=0;
+                    double total_renta = 0;
+                    double total_ingresado = 0;
                     double saldo_vueltos;
-                    Linea linea=l.getObj();
+                    System.out.println("NegocioOCR.FacadeOCR.agregarLinea()");
+                    Linea linea = l.getObj();
+                    linea.setRenta(the_renta);
+                    System.out.println("Insertando " + linea + " " + linea.getCarroid());
                     this.lineaControl.create(linea);
+                    System.out.println("Insertado");
                     l.setObj(linea);
                     System.out.println(l.getObj());
                     for (Iterator<Linea> it = the_renta.getLineaCollection().iterator(); it.hasNext();) {
                         Linea line = it.next();
-                        total_renta+=(line.getCantidad()*line.getCarroid().getPrecio());
+                        total_renta += (line.getCantidad() * line.getCarroid().getPrecio());
                     }
                     for (Iterator<Rentaxbillete> it = the_renta.getRentaxbilleteCollection().iterator(); it.hasNext();) {
                         Rentaxbillete billeteIngresado = it.next();
-                        total_ingresado+=(billeteIngresado.getCantidad()*billeteIngresado.getDenominacionbillete().getValor());
+                        total_ingresado += (billeteIngresado.getCantidad() * billeteIngresado.getDenominacionbillete().getValor());
                     }
-                    saldo_vueltos=total_ingresado-total_renta;
-                    dtoresumen=new DTOresumen(the_renta.getLineaCollection(), total_renta, total_ingresado, saldo_vueltos);
+                    the_renta.add(linea);
+                    saldo_vueltos = total_ingresado - total_renta;
+                    dtoresumen = new DTOresumen(the_renta.getLineaCollection(), total_renta, total_ingresado, saldo_vueltos);
                 } catch (Exception e) {
                     dtoresumen = new DTOresumen("Ha ocurrido un error, por favor intente nuevamente");
+                } finally {
+                    try {
+                        Thread.sleep(2000);
+                    }catch(Exception e){
+                    }
                 }
             }
         }
+        System.out.println(dtoresumen.getLineas());
         return dtoresumen;
+    }
+
+    public void agregarBillete(DTO<Rentaxbillete> dtorxb) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

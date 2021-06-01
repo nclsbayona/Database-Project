@@ -5,21 +5,21 @@
  */
 package IntegracionDatos;
 
-import IntegracionDatos.exceptions.NonexistentEntityException;
-import IntegracionDatos.exceptions.PreexistingEntityException;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import EntidadesOCR.Carro;
 import EntidadesOCR.Linea;
 import EntidadesOCR.LineaPK;
 import EntidadesOCR.Renta;
+import IntegracionDatos.exceptions.NonexistentEntityException;
+import IntegracionDatos.exceptions.PreexistingEntityException;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -27,13 +27,13 @@ import EntidadesOCR.Renta;
  */
 public class LineaJpaController implements Serializable {
 
-    public LineaJpaController() {
-    }
-
     public LineaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("OnlineCarRentalPU");
+
+    public LineaJpaController() {
+    }
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -209,5 +209,5 @@ public class LineaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

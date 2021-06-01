@@ -123,6 +123,6 @@ public class Linea implements Serializable {
 
     @Override
     public String toString() {
-        return "Linea{" + lineaPK + ", cantidad=" + cantidad + ", carroid=" + carroid + ", renta=" + renta + '}';
+        return "Linea{" + lineaPK + ", cantidad=" + cantidad + ", carroid=" + carroid.getId()+ ", renta=" + renta + '}';
     }
 }

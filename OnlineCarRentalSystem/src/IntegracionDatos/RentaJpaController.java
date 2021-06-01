@@ -5,8 +5,6 @@
  */
 package IntegracionDatos;
 
-import IntegracionDatos.exceptions.IllegalOrphanException;
-import IntegracionDatos.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -15,13 +13,14 @@ import javax.persistence.criteria.Root;
 import EntidadesOCR.Parametro;
 import EntidadesOCR.Rentaxbillete;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import EntidadesOCR.Linea;
+import EntidadesOCR.Renta;
+import IntegracionDatos.exceptions.IllegalOrphanException;
+import IntegracionDatos.exceptions.NonexistentEntityException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import EntidadesOCR.Linea;
-import EntidadesOCR.Renta;
 
 /**
  *
@@ -29,13 +28,13 @@ import EntidadesOCR.Renta;
  */
 public class RentaJpaController implements Serializable {
 
-    public RentaJpaController() {
-    }
-
     public RentaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("OnlineCarRentalPU");
+
+    public RentaJpaController() {
+    }
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -57,13 +56,13 @@ public class RentaJpaController implements Serializable {
                 parametroid = em.getReference(parametroid.getClass(), parametroid.getId());
                 renta.setParametroid(parametroid);
             }
-            Collection<Rentaxbillete> attachedRentaxbilleteCollection = new ArrayList<Rentaxbillete>();
+            List<Rentaxbillete> attachedRentaxbilleteCollection = new ArrayList<Rentaxbillete>();
             for (Rentaxbillete rentaxbilleteCollectionRentaxbilleteToAttach : renta.getRentaxbilleteCollection()) {
                 rentaxbilleteCollectionRentaxbilleteToAttach = em.getReference(rentaxbilleteCollectionRentaxbilleteToAttach.getClass(), rentaxbilleteCollectionRentaxbilleteToAttach.getRentaxbilletePK());
                 attachedRentaxbilleteCollection.add(rentaxbilleteCollectionRentaxbilleteToAttach);
             }
             renta.setRentaxbilleteCollection(attachedRentaxbilleteCollection);
-            Collection<Linea> attachedLineaCollection = new ArrayList<Linea>();
+            List<Linea> attachedLineaCollection = new ArrayList<Linea>();
             for (Linea lineaCollectionLineaToAttach : renta.getLineaCollection()) {
                 lineaCollectionLineaToAttach = em.getReference(lineaCollectionLineaToAttach.getClass(), lineaCollectionLineaToAttach.getLineaPK());
                 attachedLineaCollection.add(lineaCollectionLineaToAttach);
@@ -108,10 +107,10 @@ public class RentaJpaController implements Serializable {
             Renta persistentRenta = em.find(Renta.class, renta.getId());
             Parametro parametroidOld = persistentRenta.getParametroid();
             Parametro parametroidNew = renta.getParametroid();
-            Collection<Rentaxbillete> rentaxbilleteCollectionOld = persistentRenta.getRentaxbilleteCollection();
-            Collection<Rentaxbillete> rentaxbilleteCollectionNew = renta.getRentaxbilleteCollection();
-            Collection<Linea> lineaCollectionOld = persistentRenta.getLineaCollection();
-            Collection<Linea> lineaCollectionNew = renta.getLineaCollection();
+            List<Rentaxbillete> rentaxbilleteCollectionOld = persistentRenta.getRentaxbilleteCollection();
+            List<Rentaxbillete> rentaxbilleteCollectionNew = renta.getRentaxbilleteCollection();
+            List<Linea> lineaCollectionOld = persistentRenta.getLineaCollection();
+            List<Linea> lineaCollectionNew = renta.getLineaCollection();
             List<String> illegalOrphanMessages = null;
             for (Rentaxbillete rentaxbilleteCollectionOldRentaxbillete : rentaxbilleteCollectionOld) {
                 if (!rentaxbilleteCollectionNew.contains(rentaxbilleteCollectionOldRentaxbillete)) {
@@ -136,14 +135,14 @@ public class RentaJpaController implements Serializable {
                 parametroidNew = em.getReference(parametroidNew.getClass(), parametroidNew.getId());
                 renta.setParametroid(parametroidNew);
             }
-            Collection<Rentaxbillete> attachedRentaxbilleteCollectionNew = new ArrayList<Rentaxbillete>();
+            List<Rentaxbillete> attachedRentaxbilleteCollectionNew = new ArrayList<Rentaxbillete>();
             for (Rentaxbillete rentaxbilleteCollectionNewRentaxbilleteToAttach : rentaxbilleteCollectionNew) {
                 rentaxbilleteCollectionNewRentaxbilleteToAttach = em.getReference(rentaxbilleteCollectionNewRentaxbilleteToAttach.getClass(), rentaxbilleteCollectionNewRentaxbilleteToAttach.getRentaxbilletePK());
                 attachedRentaxbilleteCollectionNew.add(rentaxbilleteCollectionNewRentaxbilleteToAttach);
             }
             rentaxbilleteCollectionNew = attachedRentaxbilleteCollectionNew;
             renta.setRentaxbilleteCollection(rentaxbilleteCollectionNew);
-            Collection<Linea> attachedLineaCollectionNew = new ArrayList<Linea>();
+            List<Linea> attachedLineaCollectionNew = new ArrayList<Linea>();
             for (Linea lineaCollectionNewLineaToAttach : lineaCollectionNew) {
                 lineaCollectionNewLineaToAttach = em.getReference(lineaCollectionNewLineaToAttach.getClass(), lineaCollectionNewLineaToAttach.getLineaPK());
                 attachedLineaCollectionNew.add(lineaCollectionNewLineaToAttach);
@@ -211,14 +210,14 @@ public class RentaJpaController implements Serializable {
                 throw new NonexistentEntityException("The renta with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Rentaxbillete> rentaxbilleteCollectionOrphanCheck = renta.getRentaxbilleteCollection();
+            List<Rentaxbillete> rentaxbilleteCollectionOrphanCheck = renta.getRentaxbilleteCollection();
             for (Rentaxbillete rentaxbilleteCollectionOrphanCheckRentaxbillete : rentaxbilleteCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Renta (" + renta + ") cannot be destroyed since the Rentaxbillete " + rentaxbilleteCollectionOrphanCheckRentaxbillete + " in its rentaxbilleteCollection field has a non-nullable renta field.");
             }
-            Collection<Linea> lineaCollectionOrphanCheck = renta.getLineaCollection();
+            List<Linea> lineaCollectionOrphanCheck = renta.getLineaCollection();
             for (Linea lineaCollectionOrphanCheckLinea : lineaCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
@@ -287,5 +286,5 @@ public class RentaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

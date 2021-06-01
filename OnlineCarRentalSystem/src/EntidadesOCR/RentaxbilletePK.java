@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 /**
  *
@@ -24,16 +26,16 @@ public class RentaxbilletePK implements Serializable {
     @Column(name = "DENOMINACIONBILLETEID")
     private int denominacionbilleteid;
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private int id;
 
     public RentaxbilletePK() {
     }
 
-    public RentaxbilletePK(int rentaid, int denominacionbilleteid, int id) {
+    public RentaxbilletePK(int rentaid, int denominacionbilleteid) {
         this.rentaid = rentaid;
         this.denominacionbilleteid = denominacionbilleteid;
-        this.id = id;
     }
 
     public int getRentaid() {
