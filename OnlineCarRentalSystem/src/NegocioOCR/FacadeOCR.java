@@ -23,7 +23,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -123,7 +126,7 @@ public class FacadeOCR {
     }
 
     public DTOresumen agregarLinea(DTO<Linea> l) {
-        DTOresumen dtoresumen;
+        DTOresumen dtoresumen = null;
         if (!this.carroControl.carExists(l.getObj().getCarroid().getId())) {
             dtoresumen = new DTOresumen("No existe este carro en el catalogo");
         } else if (!this.carroControl.carAvailable(l.getObj().getCarroid().getId())) {
@@ -134,43 +137,60 @@ public class FacadeOCR {
             query.setParameter(1, (l.getObj().getRentaid()));
             Renta the_renta = (Renta) (query.getSingleResult());
             //Aqui se mira si existe una renta ya del mismo carro y eso
-            if (/*Ya existe y debo es añadirle*/false) {
-
-            } else {
+            Query query2;
+            query2 = (this.lineaControl.getEntityManager().createNativeQuery("SELECT * FROM LINEA WHERE CARROID=? AND RENTAID=?", Linea.class));
+            query2.setParameter(1, (l.getObj().getCarroid().getId()));
+            query2.setParameter(2, l.getObj().getRentaid());
+            Linea the_line = null;
+            try {
+                the_line = (Linea) (query2.getSingleResult());
+            } catch (NoResultException ne) {
+            }
+            if (the_line != null) {
                 try {
+                    the_line.setCantidad(the_line.getCantidad() + l.getObj().getCantidad());
+                    this.lineaControl.edit(the_line);
                     double total_renta = 0;
                     double total_ingresado = 0;
                     double saldo_vueltos;
-                    System.out.println("NegocioOCR.FacadeOCR.agregarLinea()");
-                    Linea linea = l.getObj();
-                    linea.setRenta(the_renta);
-                    System.out.println("Insertando " + linea + " " + linea.getCarroid());
-                    this.lineaControl.create(linea);
-                    System.out.println("Insertado");
-                    l.setObj(linea);
-                    System.out.println(l.getObj());
                     for (Iterator<Linea> it = the_renta.getLineaCollection().iterator(); it.hasNext();) {
                         Linea line = it.next();
-                        total_renta += (line.getCantidad() * line.getCarroid().getPrecio());
+                        total_renta = total_renta + (line.getCantidad() * line.getCarroid().getPrecio());
                     }
                     for (Iterator<Rentaxbillete> it = the_renta.getRentaxbilleteCollection().iterator(); it.hasNext();) {
                         Rentaxbillete billeteIngresado = it.next();
                         total_ingresado += (billeteIngresado.getCantidad() * billeteIngresado.getDenominacionbillete().getValor());
                     }
+                    saldo_vueltos = total_ingresado - total_renta;
+                    dtoresumen = new DTOresumen(the_renta.getLineaCollection(), total_renta, total_ingresado, saldo_vueltos);
+                } catch (Exception ex) {
+                    Logger.getLogger(FacadeOCR.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    double total_renta = 0;
+                    double total_ingresado = 0;
+                    double saldo_vueltos;
+                    Linea linea = l.getObj();
+                    linea.setRenta(the_renta);
+                    this.lineaControl.create(linea);
+                    l.setObj(linea);
                     the_renta.add(linea);
+                    for (Iterator<Linea> it = the_renta.getLineaCollection().iterator(); it.hasNext();) {
+                        Linea line = it.next();
+                        total_renta = total_renta + (line.getCantidad() * line.getCarroid().getPrecio());
+                    }
+                    for (Iterator<Rentaxbillete> it = the_renta.getRentaxbilleteCollection().iterator(); it.hasNext();) {
+                        Rentaxbillete billeteIngresado = it.next();
+                        total_ingresado += (billeteIngresado.getCantidad() * billeteIngresado.getDenominacionbillete().getValor());
+                    }
                     saldo_vueltos = total_ingresado - total_renta;
                     dtoresumen = new DTOresumen(the_renta.getLineaCollection(), total_renta, total_ingresado, saldo_vueltos);
                 } catch (Exception e) {
                     dtoresumen = new DTOresumen("Ha ocurrido un error, por favor intente nuevamente");
-                } finally {
-                    try {
-                        Thread.sleep(2000);
-                    }catch(Exception e){
-                    }
                 }
             }
         }
-        System.out.println(dtoresumen.getLineas());
         return dtoresumen;
     }
 

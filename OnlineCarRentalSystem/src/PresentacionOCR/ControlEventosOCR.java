@@ -13,6 +13,9 @@ import EntidadesOCR.Rentaxbillete;
 import EntidadesOCR.classes.DTO;
 import EntidadesOCR.classes.DTOresumen;
 import NegocioOCR.FacadeOCR;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -114,19 +117,33 @@ public class ControlEventosOCR {
         if (dtoresumen.getMensaje() != null) {
             this.createNewStageError(dtoresumen.getMensaje());
         } else {
+            this.crearDtoResumenReview(dtoresumen);
             this.rentaActual = dtorenta.getObj();
-            this.renta_actual_txt.setText(this.rentaActual.toString());
             this.updateCarList();
             this.updateBilleteDenominacionList();
         }
     }
 
     private void updateCarList() {
+        
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ControlEventosOCR.class.getName()).log(Level.SEVERE, null, ex);
+            }
         this.carros_list_view.setItems(FXCollections.observableList(this.facadeocr.consultarCarros()));
+        this.renta_actual_txt.setText(this.rentaActual.toString());
     }
 
     private void updateBilleteDenominacionList() {
+        
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ControlEventosOCR.class.getName()).log(Level.SEVERE, null, ex);
+            }
         this.tipo_billete_list_view.setItems(FXCollections.observableList(this.facadeocr.consultarTiposBillete()));
+        this.renta_actual_txt.setText(this.rentaActual.toString());
     }
 
     private void createNewStageError(String msg) {
@@ -157,6 +174,8 @@ public class ControlEventosOCR {
     }
 
     private void crearDtoResumenReview(DTOresumen dtoresumen) {
+        if (dtoresumen.getLineas()==null)
+            dtoresumen.setLineas(new ArrayList<>());
         this.linea_collection_list_view.setItems(FXCollections.observableList(dtoresumen.getLineas()));
         this.saldo_ingresados_txt.setText(String.valueOf(dtoresumen.getSaldo_ingresados()));
         this.total_de_la_renta_txt.setText(String.valueOf(dtoresumen.getTotal_renta()));
@@ -165,7 +184,7 @@ public class ControlEventosOCR {
     }
     
     @FXML
-    void close_resumen_btn(ActionEvent event) {
+    void close_resumen(ActionEvent event) {
         this.activateDTOPane();
     }
 
