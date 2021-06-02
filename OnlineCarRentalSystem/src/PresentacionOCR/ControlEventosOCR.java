@@ -26,9 +26,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -44,6 +44,9 @@ public class ControlEventosOCR {
 
     @FXML // fx:id="mainWindow"
     private AnchorPane mainWindow;
+    
+     @FXML // fx:id="dtoresumen_pane"
+    private GridPane dtoresumen_pane; // Value injected by FXMLLoader
 
     @FXML // fx:id="crear_renta_btn"
     private Button crear_renta_btn; // Value injected by FXMLLoader
@@ -150,12 +153,12 @@ public class ControlEventosOCR {
         alerta.showAndWait();
     }
 
-    private void crearDtoResumenReview(DTOresumen dtoresumen) {
-        
-        //this.linea_collection_list_view.setItems(FXCollections.observableList(dtoresumen.getLineas()));
-        //this.cantidad_vueltos_txt.setText(String.valueOf(dtoresumen.getCantidad_vueltos()));
-        this.saldo_ingresados_txt.setText(String.valueOf(dtoresumen.getSaldo_ingresados()));
+    private void activateDTOPane(){
+        this.dtoresumen_pane.setVisible(!(this.dtoresumen_pane.isVisible()));
+        this.dtoresumen_pane.setDisable(!(this.dtoresumen_pane.isDisabled()));
     }
+    
+    private 
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
@@ -170,5 +173,10 @@ public class ControlEventosOCR {
         assert total_de_la_renta_txt != null : "fx:id=\"total_de_la_renta_txt\" was not injected: check your FXML file 'DTOResumenScreen.fxml'.";
         assert saldo_ingresados_txt != null : "fx:id=\"saldo_ingresados_txt\" was not injected: check your FXML file 'DTOResumenScreen.fxml'.";
         assert cantidad_vueltos_txt != null : "fx:id=\"cantidad_vueltos_txt\" was not injected: check your FXML file 'DTOResumenScreen.fxml'.";
+        assert dtoresumen_pane != null : "fx:id=\"dtoresumen_pane\" was not injected: check your FXML file 'PantallaPrincipal.fxml'.";
+    }
+
+    private void crearDtoResumenReview(DTOresumen dtoresumen) {
+        this.activateDTOPane();
     }
 }
