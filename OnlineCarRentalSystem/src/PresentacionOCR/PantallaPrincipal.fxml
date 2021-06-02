@@ -22,7 +22,7 @@
       <ListView fx:id="tipo_billete_list_view" layoutX="412.0" layoutY="134.0" prefHeight="227.0" prefWidth="351.0" />
       <Button fx:id="aniadir_carro_btn" layoutX="170.0" layoutY="374.0" onAction="#aniadir_carro" style="-fx-background-color: #0B1E0F;" text="Añadir carro" textFill="WHITE" />
       <Button fx:id="aniadir_tipo_billete_btn" layoutX="532.0" layoutY="374.0" onAction="#aniadir_billete" style="-fx-background-color: #0B1E0F;" text="Añadir tipo billete" textFill="WHITE" />
-      <GridPane fx:id="dtoresumen_pane" layoutX="97.0" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #0B1E33;">
+      <GridPane fx:id="dtoresumen_pane" disable="true" layoutX="97.0" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #0B1E33;" visible="false">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

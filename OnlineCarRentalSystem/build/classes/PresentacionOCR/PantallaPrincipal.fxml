@@ -49,6 +49,7 @@
             <Text fx:id="saldo_ingresados_txt" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="201.13671875" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Cantidad vueltos" textAlignment="CENTER" wrappingWidth="201.13671875" GridPane.rowIndex="4" />
             <Text fx:id="cantidad_vueltos_txt" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="201.13671875" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Button fx:id="close_resumen_btn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" style="-fx-background-color: #890303;" text="Close" textAlignment="CENTER" textFill="#f96363" GridPane.columnIndex="2" />
          </children>
       </GridPane>
     </children>

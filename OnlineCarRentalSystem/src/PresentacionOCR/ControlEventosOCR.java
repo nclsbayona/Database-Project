@@ -13,16 +13,10 @@ import EntidadesOCR.Rentaxbillete;
 import EntidadesOCR.classes.DTO;
 import EntidadesOCR.classes.DTOresumen;
 import NegocioOCR.FacadeOCR;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -44,8 +38,8 @@ public class ControlEventosOCR {
 
     @FXML // fx:id="mainWindow"
     private AnchorPane mainWindow;
-    
-     @FXML // fx:id="dtoresumen_pane"
+
+    @FXML // fx:id="dtoresumen_pane"
     private GridPane dtoresumen_pane; // Value injected by FXMLLoader
 
     @FXML // fx:id="crear_renta_btn"
@@ -77,6 +71,9 @@ public class ControlEventosOCR {
 
     @FXML // fx:id="cantidad_vueltos_txt"
     private Text cantidad_vueltos_txt; // Value injected by FXMLLoader
+
+    @FXML // fx:id="close_resumen_btn"
+    private Button close_resumen_btn; // Value injected by FXMLLoader
 
     @FXML
     void aniadir_carro(ActionEvent event) {
@@ -116,11 +113,12 @@ public class ControlEventosOCR {
         DTOresumen dtoresumen = this.facadeocr.crearRenta(dtorenta);
         if (dtoresumen.getMensaje() != null) {
             this.createNewStageError(dtoresumen.getMensaje());
+        } else {
+            this.rentaActual = dtorenta.getObj();
+            this.renta_actual_txt.setText(this.rentaActual.toString());
+            this.updateCarList();
+            this.updateBilleteDenominacionList();
         }
-        this.rentaActual = dtorenta.getObj();
-        this.renta_actual_txt.setText(this.rentaActual.toString());
-        this.updateCarList();
-        this.updateBilleteDenominacionList();
     }
 
     private void updateCarList() {
@@ -153,12 +151,23 @@ public class ControlEventosOCR {
         alerta.showAndWait();
     }
 
-    private void activateDTOPane(){
+    private void activateDTOPane() {
         this.dtoresumen_pane.setVisible(!(this.dtoresumen_pane.isVisible()));
         this.dtoresumen_pane.setDisable(!(this.dtoresumen_pane.isDisabled()));
     }
+
+    private void crearDtoResumenReview(DTOresumen dtoresumen) {
+        this.linea_collection_list_view.setItems(FXCollections.observableList(dtoresumen.getLineas()));
+        this.saldo_ingresados_txt.setText(String.valueOf(dtoresumen.getSaldo_ingresados()));
+        this.total_de_la_renta_txt.setText(String.valueOf(dtoresumen.getTotal_renta()));
+        this.cantidad_vueltos_txt.setText(String.valueOf(dtoresumen.getCantidad_vueltos()));
+        this.activateDTOPane();
+    }
     
-    private 
+    @FXML
+    void close_resumen_btn(ActionEvent event) {
+        this.activateDTOPane();
+    }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
@@ -174,9 +183,6 @@ public class ControlEventosOCR {
         assert saldo_ingresados_txt != null : "fx:id=\"saldo_ingresados_txt\" was not injected: check your FXML file 'DTOResumenScreen.fxml'.";
         assert cantidad_vueltos_txt != null : "fx:id=\"cantidad_vueltos_txt\" was not injected: check your FXML file 'DTOResumenScreen.fxml'.";
         assert dtoresumen_pane != null : "fx:id=\"dtoresumen_pane\" was not injected: check your FXML file 'PantallaPrincipal.fxml'.";
-    }
-
-    private void crearDtoResumenReview(DTOresumen dtoresumen) {
-        this.activateDTOPane();
+        assert close_resumen_btn != null : "fx:id=\"close_resumen_btn\" was not injected: check your FXML file 'PantallaPrincipal.fxml'.";
     }
 }
