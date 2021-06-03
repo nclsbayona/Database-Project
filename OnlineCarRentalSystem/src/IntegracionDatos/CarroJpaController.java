@@ -213,4 +213,7 @@ public class CarroJpaController implements Serializable {
         return getEntityManager().find (Carro.class, id).getUnidadesdisponibles()>0;
     }
     
+    public int consultarPrecioCarro(Integer id){
+        return getEntityManager().find (Carro.class, id).getPrecio();
+    }
 }

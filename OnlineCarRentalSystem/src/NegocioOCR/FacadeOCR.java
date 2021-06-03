@@ -141,6 +141,13 @@ public class FacadeOCR {
             query2 = (this.lineaControl.getEntityManager().createNativeQuery("SELECT * FROM LINEA WHERE CARROID=? AND RENTAID=?", Linea.class));
             query2.setParameter(1, (l.getObj().getCarroid().getId()));
             query2.setParameter(2, l.getObj().getRentaid());
+            Query query3=(this.parametroControl.getEntityManager().createNativeQuery("SELECT P.CANTIDAD_CARROS FROM PARAMETRO P, RENTA R WHERE R.ID=? AND R.PARAMETROID=P.ID"));
+            query3.setParameter(1, l.getObj().getRentaid());
+            int parametro_cars_number=(int)(query3.getSingleResult());
+            Query query4=(this.parametroControl.getEntityManager().createNativeQuery("SELECT P.PORCENTAJE FROM PARAMETRO P, RENTA R WHERE R.ID=? AND R.PARAMETROID=P.ID"));
+            query4.setParameter(1, l.getObj().getRentaid());
+            int porcentaje_descuento_cars=(int)(query4.getSingleResult());
+            int cantidad_rentados;
             Linea the_line = null;
             try {
                 the_line = (Linea) (query2.getSingleResult());
@@ -148,15 +155,16 @@ public class FacadeOCR {
             }
             if (the_line != null) {
                 try {
-                    the_line.setCantidad(the_line.getCantidad() + l.getObj().getCantidad());
-                    this.lineaControl.edit(the_line);
+                    this.lineaControl.updateLine(the_line, the_line.getCantidad() + l.getObj().getCantidad());
                     double total_renta = 0;
                     double total_ingresado = 0;
                     double saldo_vueltos;
+                    cantidad_rentados=the_renta.getLineaCollection().size();
                     the_renta = (Renta) (query.getSingleResult());
                     for (Iterator<Linea> it = the_renta.getLineaCollection().iterator(); it.hasNext();) {
                         Linea line = it.next();
-                        total_renta = total_renta + (line.getCantidad() * line.getCarroid().getPrecio());
+                        int tmp=(line.getCantidad() * this.carroControl.consultarPrecioCarro(line.getCarroid().getId()))*((cantidad_rentados%parametro_cars_number)*);
+                        total_renta = total_renta + tmp;
                     }
                     for (Iterator<Rentaxbillete> it = the_renta.getRentaxbilleteCollection().iterator(); it.hasNext();) {
                         Rentaxbillete billeteIngresado = it.next();
@@ -178,6 +186,7 @@ public class FacadeOCR {
                     this.lineaControl.create(linea);
                     l.setObj(linea);
                     the_renta.add(linea);
+                    cantidad_rentados=the_renta.getLineaCollection().size();
                     for (Iterator<Linea> it = the_renta.getLineaCollection().iterator(); it.hasNext();) {
                         Linea line = it.next();
                         total_renta = total_renta + (line.getCantidad() * line.getCarroid().getPrecio());
