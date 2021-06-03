@@ -92,8 +92,8 @@ public class ControlEventosOCR {
             DTOresumen dtoresumen = this.facadeocr.agregarLinea(dtol);
             this.createNewStageDone("Exito!");
             this.crearDtoResumenReview(dtoresumen);
-            this.updateCarList();
         }
+        this.updateCarList();
     }
 
     @FXML
@@ -125,23 +125,21 @@ public class ControlEventosOCR {
     }
 
     private void updateCarList() {
-        
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ControlEventosOCR.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ControlEventosOCR.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.carros_list_view.setItems(FXCollections.observableList(this.facadeocr.consultarCarros()));
         this.renta_actual_txt.setText(this.rentaActual.toString());
     }
 
     private void updateBilleteDenominacionList() {
-        
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ControlEventosOCR.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ControlEventosOCR.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.tipo_billete_list_view.setItems(FXCollections.observableList(this.facadeocr.consultarTiposBillete()));
         this.renta_actual_txt.setText(this.rentaActual.toString());
     }
@@ -174,15 +172,16 @@ public class ControlEventosOCR {
     }
 
     private void crearDtoResumenReview(DTOresumen dtoresumen) {
-        if (dtoresumen.getLineas()==null)
+        if (dtoresumen.getLineas() == null) {
             dtoresumen.setLineas(new ArrayList<>());
+        }
         this.linea_collection_list_view.setItems(FXCollections.observableList(dtoresumen.getLineas()));
         this.saldo_ingresados_txt.setText(String.valueOf(dtoresumen.getSaldo_ingresados()));
         this.total_de_la_renta_txt.setText(String.valueOf(dtoresumen.getTotal_renta()));
         this.cantidad_vueltos_txt.setText(String.valueOf(dtoresumen.getCantidad_vueltos()));
         this.activateDTOPane();
     }
-    
+
     @FXML
     void close_resumen(ActionEvent event) {
         this.activateDTOPane();

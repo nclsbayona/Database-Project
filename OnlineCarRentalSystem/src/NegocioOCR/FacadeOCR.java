@@ -153,6 +153,7 @@ public class FacadeOCR {
                     double total_renta = 0;
                     double total_ingresado = 0;
                     double saldo_vueltos;
+                    the_renta = (Renta) (query.getSingleResult());
                     for (Iterator<Linea> it = the_renta.getLineaCollection().iterator(); it.hasNext();) {
                         Linea line = it.next();
                         total_renta = total_renta + (line.getCantidad() * line.getCarroid().getPrecio());
@@ -163,6 +164,7 @@ public class FacadeOCR {
                     }
                     saldo_vueltos = total_ingresado - total_renta;
                     dtoresumen = new DTOresumen(the_renta.getLineaCollection(), total_renta, total_ingresado, saldo_vueltos);
+                    System.out.println(this.consultarCarros());
                 } catch (Exception ex) {
                     Logger.getLogger(FacadeOCR.class.getName()).log(Level.SEVERE, null, ex);
                 }
