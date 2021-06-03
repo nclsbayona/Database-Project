@@ -287,4 +287,10 @@ public class RentaJpaController implements Serializable {
         }
     }
 
+    public List getLineaCollection(Integer id) {
+        Query query=getEntityManager().createNativeQuery("SELECT L.* FROM LINEA L, RENTA R WHERE R.ID=? AND R.ID=L.RENTAID", Linea.class);
+        query.setParameter(1, id);
+        return query.getResultList();
+    }
+
 }

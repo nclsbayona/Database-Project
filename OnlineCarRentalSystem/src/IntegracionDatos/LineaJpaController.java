@@ -17,6 +17,8 @@ import EntidadesOCR.Renta;
 import IntegracionDatos.exceptions.NonexistentEntityException;
 import IntegracionDatos.exceptions.PreexistingEntityException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -207,6 +209,15 @@ public class LineaJpaController implements Serializable {
             return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();
+        }
+    }
+
+    public void updateLine(Linea the_line, int num) {
+        the_line.setCantidad(num);
+        try {
+            this.edit(the_line);
+        } catch (Exception ex) {
+            Logger.getLogger(LineaJpaController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
