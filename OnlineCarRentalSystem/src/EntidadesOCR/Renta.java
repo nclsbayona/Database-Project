@@ -170,4 +170,8 @@ public class Renta implements Serializable {
     public boolean remove(Linea the_line) {
         return this.lineaCollection.remove(the_line);
     }
+
+    public void addRentaxB(Rentaxbillete obj) {
+       this.rentaxbilleteCollection.add(obj);
+    }
 }
