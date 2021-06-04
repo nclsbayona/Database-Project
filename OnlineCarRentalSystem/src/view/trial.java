@@ -10,6 +10,7 @@ import EntidadesOCR.Carro;
 import EntidadesOCR.Denominacionbillete;
 import EntidadesOCR.Linea;
 import EntidadesOCR.Renta;
+import EntidadesOCR.Rentaxbillete;
 import EntidadesOCR.classes.DTO;
 import EntidadesOCR.classes.DTOresumen;
 import java.util.Scanner;
@@ -59,7 +60,7 @@ public class trial {
             System.out.println(renta_actual.getLineaCollection());
             System.out.println("2. Aniadir carro");
             System.out.println("3. Eliminar linea");
-            System.out.println("7. Aniadir billete");
+            System.out.println("4. Introducir billete");
         } else {
             System.out.println("1. Crear renta");
         }
@@ -98,14 +99,26 @@ public class trial {
                 System.out.print("Seleccione linea: ");
                 entrada = sc.next();
                 entrada2 = Integer.valueOf(entrada);
-                Linea the_line = renta_actual.getLineaCollection().get(entrada2-1);
+                Linea the_line = renta_actual.getLineaCollection().get(entrada2 - 1);
                 l.setObj(the_line);
                 System.out.println(focr.eliminarLinea(l));
                 break;
             }
-            case 7: {
+            case 4: {
+                DTO<Rentaxbillete> l = new DTO<>();
                 System.out.println("La lista de denominaciones:");
                 llenarDropdownBilletes();
+                System.out.print("Seleccione denominacion: ");
+                entrada = sc.next();
+                entrada2 = Integer.valueOf(entrada);
+                System.out.print("Seleccione cantidad: ");
+                entrada = sc.next();
+                entrada3 = Integer.valueOf(entrada);
+                Rentaxbillete the_line = new Rentaxbillete(renta_actual.getId(), entrada2, entrada3);
+                the_line.setRenta(renta_actual);
+                the_line.setDenominacionbillete(focr.getDenominacion_billeteControl().getEntityManager().find(Denominacionbillete.class, entrada2));
+                l.setObj(the_line);
+                System.out.println(focr.agregarBillete(l));
                 break;
             }
             default: {

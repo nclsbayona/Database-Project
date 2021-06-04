@@ -204,5 +204,11 @@ public class DenominacionbilleteJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public boolean denExists(Integer id) {
+        System.out.println("Aqui ando buscando " + id);
+        System.out.println(getEntityManager().find(Denominacionbillete.class, id).toString());
+        return getEntityManager().find(Denominacionbillete.class, id) != null;
+    }
+
 }

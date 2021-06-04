@@ -60,6 +60,11 @@ public class Rentaxbillete implements Serializable {
     public Rentaxbillete(int rentaid, int denominacionbilleteid) {
         this.rentaxbilletePK = new RentaxbilletePK(rentaid, denominacionbilleteid);
     }
+    
+    public Rentaxbillete(int rentaid, int denominacionbilleteid, int cantidad) {
+        this.rentaxbilletePK = new RentaxbilletePK(rentaid, denominacionbilleteid);
+        this.cantidad=cantidad;
+    }
 
     public int getId(){
         return rentaxbilletePK.getId();

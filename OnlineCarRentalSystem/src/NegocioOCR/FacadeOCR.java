@@ -158,59 +158,83 @@ public class FacadeOCR {
             double saldo_total_renta = 0;
             for (Iterator<Linea> it = this.rentaControl.getLineaCollection(the_renta.getId()).iterator(); it.hasNext();) {
                 Linea linea = it.next();
-                saldo_total_renta +=(linea.getCantidad() * this.carroControl.consultarPrecioCarro(linea.getCarroid().getId()));
+                saldo_total_renta += (linea.getCantidad() * this.carroControl.consultarPrecioCarro(linea.getCarroid().getId()));
             }
             double saldo_ingresados = 0;
             for (Rentaxbillete linea : the_renta.getRentaxbilleteCollection()) {
                 saldo_ingresados = saldo_ingresados + (linea.getDenominacionbillete().getValor() * linea.getCantidad());
             }
-            double vueltos = saldo_ingresados-saldo_total_renta;
+            double vueltos = saldo_ingresados - saldo_total_renta;
             Pair<Integer, Integer> the_pair = this.parametroControl.returnParametroInfo(l.getObj().getRentaid());
             int cantidad_rentados = 0;
             for (Linea linea : this.rentaControl.getLineaCollection(the_renta.getId())) {
                 cantidad_rentados += linea.getCantidad();
             }
-            saldo_total_renta = saldo_total_renta * ((((100 - (the_pair.getValue() * ((int)(cantidad_rentados / the_pair.getKey()))))) / 100));
+            saldo_total_renta = saldo_total_renta * ((((100 - (the_pair.getValue() * ((int) (cantidad_rentados / the_pair.getKey()))))) / 100));
             dtoresumen = new DTOresumen(the_renta.getLineaCollection(), saldo_total_renta, saldo_ingresados, vueltos);
         }
         return dtoresumen;
     }
 
-    public void agregarBillete(DTO<Rentaxbillete> dtorxb) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public DTOresumen eliminarLinea(DTO<Linea> l) {
+    public DTOresumen agregarBillete(DTO<Rentaxbillete> dtorxb) {
         DTOresumen dtoresumen;
-        if (l.getObj()==null)
-            dtoresumen=new DTOresumen("La linea esta vacía");
-        else if (!this.lineaControl.buscarLineaDeRenta(l.getObj()))
-            dtoresumen=new DTOresumen("La linea no existe");
-        else{
-            Renta the_renta=l.getObj().getRenta();
-            try {
-                System.out.println(the_renta.remove(l.getObj()));
-                this.lineaControl.destroy(l.getObj().getLineaPK());
-            } catch (NonexistentEntityException ex) {
-                Logger.getLogger(FacadeOCR.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+        if (!this.denominacion_billeteControl.denExists(dtorxb.getObj().getId())) {
+            dtoresumen = new DTOresumen("No existe la denominacion especificada");
+        } else {
+            Renta the_renta = dtorxb.getObj().getRenta();
             double saldo_total_renta = 0;
             for (Iterator<Linea> it = this.rentaControl.getLineaCollection(the_renta.getId()).iterator(); it.hasNext();) {
                 Linea linea = it.next();
-                saldo_total_renta +=(linea.getCantidad() * this.carroControl.consultarPrecioCarro(linea.getCarroid().getId()));
+                saldo_total_renta += (linea.getCantidad() * this.carroControl.consultarPrecioCarro(linea.getCarroid().getId()));
             }
             double saldo_ingresados = 0;
             for (Rentaxbillete linea : the_renta.getRentaxbilleteCollection()) {
                 saldo_ingresados = saldo_ingresados + (linea.getDenominacionbillete().getValor() * linea.getCantidad());
             }
-            double vueltos = saldo_ingresados-saldo_total_renta;
+            double vueltos = saldo_ingresados - saldo_total_renta;
+            Pair<Integer, Integer> the_pair = this.parametroControl.returnParametroInfo(dtorxb.getObj().getRentaid());
+            int cantidad_rentados = 0;
+            for (Linea linea : this.rentaControl.getLineaCollection(the_renta.getId())) {
+                cantidad_rentados += linea.getCantidad();
+            }
+            saldo_total_renta = saldo_total_renta * ((((100 - (the_pair.getValue() * ((int) (cantidad_rentados / the_pair.getKey()))))) / 100));
+            dtoresumen = new DTOresumen(the_renta.getLineaCollection(), saldo_total_renta, saldo_ingresados, vueltos);
+        }
+        return dtoresumen;
+    }
+
+    public DTOresumen eliminarLinea(DTO<Linea> l) {
+        DTOresumen dtoresumen;
+        if (l.getObj() == null) {
+            dtoresumen = new DTOresumen("La linea esta vacía");
+        } else if (!this.lineaControl.buscarLineaDeRenta(l.getObj())) {
+            dtoresumen = new DTOresumen("La linea no existe");
+        } else {
+            Renta the_renta = l.getObj().getRenta();
+            try {
+                System.out.println(the_renta.remove(l.getObj()));
+                this.lineaControl.destroy(l.getObj().getLineaPK());
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(FacadeOCR.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+
+            double saldo_total_renta = 0;
+            for (Iterator<Linea> it = this.rentaControl.getLineaCollection(the_renta.getId()).iterator(); it.hasNext();) {
+                Linea linea = it.next();
+                saldo_total_renta += (linea.getCantidad() * this.carroControl.consultarPrecioCarro(linea.getCarroid().getId()));
+            }
+            double saldo_ingresados = 0;
+            for (Rentaxbillete linea : the_renta.getRentaxbilleteCollection()) {
+                saldo_ingresados = saldo_ingresados + (linea.getDenominacionbillete().getValor() * linea.getCantidad());
+            }
+            double vueltos = saldo_ingresados - saldo_total_renta;
             Pair<Integer, Integer> the_pair = this.parametroControl.returnParametroInfo(l.getObj().getRentaid());
             int cantidad_rentados = 0;
             for (Linea linea : this.rentaControl.getLineaCollection(the_renta.getId())) {
                 cantidad_rentados += linea.getCantidad();
             }
-            saldo_total_renta = saldo_total_renta * ((((100 - (the_pair.getValue() * ((int)(cantidad_rentados / the_pair.getKey()))))) / 100));
+            saldo_total_renta = saldo_total_renta * ((((100 - (the_pair.getValue() * ((int) (cantidad_rentados / the_pair.getKey()))))) / 100));
             dtoresumen = new DTOresumen(the_renta.getLineaCollection(), saldo_total_renta, saldo_ingresados, vueltos);
         }
         return dtoresumen;
