@@ -62,9 +62,10 @@
                 <RowConstraints maxHeight="79.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="219.0" minHeight="10.0" prefHeight="214.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="73.0" minHeight="0.0" prefHeight="39.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="43.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="73.0" minHeight="0.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="16.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label prefHeight="38.0" prefWidth="228.0" text="      Renta Carros" GridPane.rowIndex="1">
@@ -72,11 +73,11 @@
                         <Font size="26.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="99.0" text="Nueva Renta" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button id="but_NuevaRenta" mnemonicParsing="false" prefHeight="25.0" prefWidth="99.0" text="Nueva Renta" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <FlowPane alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                      <children>
                         <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="215.0" text="                  Fecha Hora Renta" />
-                        <Label text="      2021-04-15  " />
+                        <Label id="lbl_FechaRenta" text="      2021-04-15  " />
                      </children>
                   </FlowPane>
                   <GridPane GridPane.rowIndex="3">
@@ -92,12 +93,12 @@
                     </rowConstraints>
                      <children>
                         <Label alignment="CENTER" prefHeight="44.0" prefWidth="132.0" text="Seleccione Carro por numero de puestos" textAlignment="CENTER" wrapText="true" />
-                        <ComboBox prefHeight="25.0" prefWidth="247.0" promptText="SeleccionCarros" GridPane.columnIndex="1" />
+                        <ComboBox id="cbox_SeleccionCarros" prefHeight="25.0" prefWidth="247.0" promptText="SeleccionCarros" GridPane.columnIndex="1" />
                         <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="91.0" text="Cantidad:" textAlignment="RIGHT" wrapText="true" GridPane.columnIndex="2" />
                         <TextField prefHeight="25.0" prefWidth="58.0" GridPane.columnIndex="3" />
                      </children>
                   </GridPane>
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Agregar Linea" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Button id="butAgregarLinea" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Agregar Linea" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label prefHeight="38.0" prefWidth="290.0" text="     Líneas de la Renta" GridPane.rowIndex="4">
                      <font>
                         <Font size="18.0" />
@@ -115,12 +116,12 @@
                       <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TableView prefHeight="160.0" prefWidth="489.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <TableView id="tabla" prefHeight="160.0" prefWidth="489.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                           <columns>
-                            <TableColumn prefWidth="119.0" text="Placa Carro" />
-                            <TableColumn prefWidth="84.0" text="Cantidad" />
-                              <TableColumn prefWidth="161.0" text="Precio Carro" />
-                              <TableColumn prefWidth="124.0" text="SubTotal" />
+                            <TableColumn id="col_PlacaCarro" prefWidth="119.0" text="Placa Carro" />
+                            <TableColumn id="col_Cantidad" prefWidth="84.0" text="Cantidad" />
+                              <TableColumn id="col_PrecioCarro" prefWidth="161.0" text="Precio Carro" />
+                              <TableColumn id="col_SubTotal" prefWidth="124.0" text="SubTotal" />
                           </columns>
                         </TableView>
                         <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -133,7 +134,7 @@
                           </rowConstraints>
                            <children>
                               <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="385.0" text="Total Renta    " textAlignment="RIGHT" />
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="95.0" text="xxxx" GridPane.columnIndex="1" />
+                              <Label id="ValorTotalRenta" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="95.0" text="xxxx" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                      </children>
@@ -148,7 +149,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Eliminar Linea" />
+                        <Button id="but_EliminarLinea" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Eliminar Linea" />
                      </children>
                   </GridPane>
                   <GridPane GridPane.rowIndex="6">
@@ -165,10 +166,10 @@
                     </rowConstraints>
                      <children>
                         <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="108.0" text="Denominaciones  " />
-                        <ComboBox prefHeight="25.0" prefWidth="103.0" promptText="10000" GridPane.columnIndex="1" />
+                        <ComboBox id="cbox_Denominaciones" prefHeight="25.0" prefWidth="103.0" promptText="10000" GridPane.columnIndex="1" />
                         <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="132.0" text="Cantidad  " GridPane.columnIndex="2" />
                         <TextField prefHeight="25.0" prefWidth="58.0" text="3" GridPane.columnIndex="3" />
-                        <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Agregar Billete" GridPane.columnIndex="5" />
+                        <Button id="but_AgregarBillete" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Agregar Billete" GridPane.columnIndex="5" />
                      </children>
                   </GridPane>
                   <GridPane GridPane.columnIndex="1" GridPane.rowIndex="6">
@@ -181,7 +182,7 @@
                     </rowConstraints>
                      <children>
                         <Label text="Saldo Billetes Ingresados:" wrapText="true" />
-                        <Label prefHeight="17.0" prefWidth="50.0" text="30000" GridPane.columnIndex="1" />
+                        <Label id="lbl_ValorSaldoBilletes" prefHeight="17.0" prefWidth="50.0" text="30000" GridPane.columnIndex="1" />
                      </children>
                   </GridPane>
                   <GridPane GridPane.rowIndex="7">
@@ -195,9 +196,9 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text="Terminr Renta" GridPane.columnIndex="1" />
+                        <Button id="but_TerminarRenta" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text="Terminar Renta" GridPane.columnIndex="1" />
                         <Label prefHeight="17.0" prefWidth="59.0" text="Vueltos:" GridPane.columnIndex="2" />
-                        <Label text="400" GridPane.columnIndex="3" />
+                        <Label id="lbl_ValorVueltos" text="400" GridPane.columnIndex="3" />
                      </children>
                   </GridPane>
                   <GridPane prefHeight="26.0" prefWidth="511.0" GridPane.rowIndex="8">
@@ -206,7 +207,7 @@
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="505.0" minWidth="10.0" prefWidth="498.0" />
                     </columnConstraints>
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="109.0" text="Generar Reporte" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Button id="but_GenerarReporte" mnemonicParsing="false" prefHeight="25.0" prefWidth="109.0" text="Generar Reporte" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                </children>
