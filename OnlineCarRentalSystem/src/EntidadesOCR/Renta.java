@@ -167,7 +167,7 @@ public class Renta implements Serializable {
         this.lineaCollection.add(linea);
     }
 
-    public void remove(Linea the_line) {
-        this.lineaCollection.remove(the_line);
+    public boolean remove(Linea the_line) {
+        return this.lineaCollection.remove(the_line);
     }
 }

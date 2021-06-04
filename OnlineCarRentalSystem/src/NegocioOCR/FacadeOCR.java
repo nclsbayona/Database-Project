@@ -189,7 +189,7 @@ public class FacadeOCR {
         else{
             Renta the_renta=l.getObj().getRenta();
             try {
-                the_renta.remove(l.getObj());
+                System.out.println(the_renta.remove(l.getObj()));
                 this.lineaControl.destroy(l.getObj().getLineaPK());
             } catch (NonexistentEntityException ex) {
                 Logger.getLogger(FacadeOCR.class.getName()).log(Level.SEVERE, null, ex);

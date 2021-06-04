@@ -100,7 +100,6 @@ public class trial {
                 entrada2 = Integer.valueOf(entrada);
                 Linea the_line = renta_actual.getLineaCollection().get(entrada2-1);
                 l.setObj(the_line);
-                System.out.println(the_line);
                 System.out.println(focr.eliminarLinea(l));
                 break;
             }
