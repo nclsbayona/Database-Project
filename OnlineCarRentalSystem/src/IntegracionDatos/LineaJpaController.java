@@ -222,7 +222,7 @@ public class LineaJpaController implements Serializable {
     }
 
     public boolean buscarLineaDeRenta(Linea obj) {
-        return getEntityManager().find(Linea.class, obj.getId())!=null;
+        return getEntityManager().find(Linea.class, obj.getLineaPK())!=null;
     }
 
 }
