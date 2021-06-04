@@ -237,4 +237,15 @@ public class FacadeOCR {
             return null;
         }
     }
+    
+    public List<DTO<Carro>> consultarAcumulados(){
+        List<DTO<Carro>> al=new ArrayList<>();
+        for (Renta renta:this.rentaControl.findRentaEntities())
+        {
+            for (Linea l:renta.getLineaCollection()){
+                al.add(new DTO<>(l.getCarroid()));
+            }
+        }
+        return al;
+    }
 }
