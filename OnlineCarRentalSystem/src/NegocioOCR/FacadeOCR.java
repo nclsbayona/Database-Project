@@ -183,6 +183,7 @@ public class FacadeOCR {
             dtoresumen = new DTOresumen("No existe la denominacion especificada");
         } else {
             Renta the_renta = dtorxb.getObj().getRenta();
+            the_renta.addRentaxB(dtorxb.getObj());
             double saldo_total_renta = 0;
             for (Iterator<Linea> it = this.rentaControl.getLineaCollection(the_renta.getId()).iterator(); it.hasNext();) {
                 Linea linea = it.next();
