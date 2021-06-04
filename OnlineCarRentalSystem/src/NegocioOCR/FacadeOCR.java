@@ -229,4 +229,12 @@ public class FacadeOCR {
         }
         return dtoresumen;
     }
+
+    public Renta consultarRenta(DTO<Renta> dtorenta, Integer entrada3) {
+        try{
+            return this.rentaControl.findRenta(entrada3);
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

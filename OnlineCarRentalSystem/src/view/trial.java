@@ -123,6 +123,17 @@ public class trial {
                 System.out.println(focr.agregarBillete(l));
                 break;
             }
+            case 5:{
+                System.out.println(focr.terminarRenta(renta_actual));
+                break;
+            }
+            case 6:{
+                DTO<Renta> dtorenta=new DTO<>();
+                System.out.print("Ingrese rentaid: ");
+                entrada = sc.next();
+                entrada3 = Integer.valueOf(entrada);
+                focr.consultarRenta(dtorenta, entrada3);
+            }
             default: {
                 return false;
             }
