@@ -167,7 +167,7 @@ public class CarroJpaController implements Serializable {
         return findCarroEntities(false, maxResults, firstResult);
     }
 
-    private List<Carro> findCarroEntities(boolean all, int maxResults, int firstResult) {
+    public List<Carro> findCarroEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();

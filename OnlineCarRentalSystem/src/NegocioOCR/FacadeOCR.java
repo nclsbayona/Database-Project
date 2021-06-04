@@ -68,8 +68,9 @@ public class FacadeOCR {
     private RentaxbilleteJpaController rentaXbilleteControl = new RentaxbilleteJpaController();
 
     public List<Carro> consultarCarros() {
-        List<Carro> carros = this.carroControl.findCarroEntities();
-        return carros;
+        EntityManager em = this.carroControl.getEntityManager();
+        Query query = em.createNativeQuery("SELECT * FROM CARRO", Carro.class);
+        return query.getResultList();
     }
 
     public List<Carro> consultarCarrosDisponibles() {
@@ -83,28 +84,28 @@ public class FacadeOCR {
         return carros_disponibles;
     }
 
-    public DTOresumen construirRespuestaRenta(Renta the_renta){
+    public DTOresumen construirRespuestaRenta(Renta the_renta) {
         DTOresumen dtoresumen;
         double saldo_total_renta = 0;
-            for (Iterator<Linea> it = this.rentaControl.getLineaCollection(the_renta.getId()).iterator(); it.hasNext();) {
-                Linea linea = it.next();
-                saldo_total_renta += (linea.getCantidad() * this.carroControl.consultarPrecioCarro(linea.getCarroid().getId()));
-            }
-            double saldo_ingresados = 0;
-            for (Rentaxbillete linea : the_renta.getRentaxbilleteCollection()) {
-                saldo_ingresados = saldo_ingresados + (linea.getDenominacionbillete().getValor() * linea.getCantidad());
-            }
-            double vueltos = saldo_ingresados - saldo_total_renta;
-            Pair<Integer, Integer> the_pair = this.parametroControl.returnParametroInfo(the_renta.getId());
-            int cantidad_rentados = 0;
-            for (Linea linea : this.rentaControl.getLineaCollection(the_renta.getId())) {
-                cantidad_rentados += linea.getCantidad();
-            }
-            saldo_total_renta = saldo_total_renta * ((((100 - (the_pair.getValue() * ((int) (cantidad_rentados / the_pair.getKey()))))) / 100));
-            dtoresumen = new DTOresumen(the_renta.getLineaCollection(), saldo_total_renta, saldo_ingresados, vueltos);
+        for (Iterator<Linea> it = this.rentaControl.getLineaCollection(the_renta.getId()).iterator(); it.hasNext();) {
+            Linea linea = it.next();
+            saldo_total_renta += (linea.getCantidad() * this.carroControl.consultarPrecioCarro(linea.getCarroid().getId()));
+        }
+        double saldo_ingresados = 0;
+        for (Rentaxbillete linea : the_renta.getRentaxbilleteCollection()) {
+            saldo_ingresados = saldo_ingresados + (linea.getDenominacionbillete().getValor() * linea.getCantidad());
+        }
+        double vueltos = saldo_ingresados - saldo_total_renta;
+        Pair<Integer, Integer> the_pair = this.parametroControl.returnParametroInfo(the_renta.getId());
+        int cantidad_rentados = 0;
+        for (Linea linea : this.rentaControl.getLineaCollection(the_renta.getId())) {
+            cantidad_rentados += linea.getCantidad();
+        }
+        saldo_total_renta = saldo_total_renta * ((((100 - (the_pair.getValue() * ((int) (cantidad_rentados / the_pair.getKey()))))) / 100));
+        dtoresumen = new DTOresumen(the_renta.getLineaCollection(), saldo_total_renta, saldo_ingresados, vueltos);
         return dtoresumen;
     }
-    
+
     public List<Denominacionbillete> consultarTiposBillete() {
         DenominacionbilleteJpaController dbjpa = new DenominacionbilleteJpaController();
         List<Denominacionbillete> tipos = dbjpa.findDenominacionbilleteEntities();
@@ -177,20 +178,20 @@ public class FacadeOCR {
                 } catch (Exception e) {
                 }
             }
-            dtoresumen=this.construirRespuestaRenta(the_renta);
+            dtoresumen = this.construirRespuestaRenta(the_renta);
         }
         return dtoresumen;
     }
 
     public DTOresumen agregarBillete(DTO<Rentaxbillete> dtorxb) {
         DTOresumen dtoresumen;
-        System.out.println("El simple ID es: "+dtorxb.getObj().getId());
+        System.out.println("El simple ID es: " + dtorxb.getObj().getId());
         if (!this.denominacion_billeteControl.denExists(dtorxb.getObj().getDenominacionbilleteid())) {
             dtoresumen = new DTOresumen("No existe la denominacion especificada");
         } else {
             Renta the_renta = dtorxb.getObj().getRenta();
             the_renta.addRentaxB(dtorxb.getObj());
-            dtoresumen=this.construirRespuestaRenta(the_renta);
+            dtoresumen = this.construirRespuestaRenta(the_renta);
         }
         return dtoresumen;
     }
@@ -210,39 +211,39 @@ public class FacadeOCR {
                 Logger.getLogger(FacadeOCR.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
-            dtoresumen=this.construirRespuestaRenta(the_renta);
+            dtoresumen = this.construirRespuestaRenta(the_renta);
         }
         return dtoresumen;
     }
-    
-    private double devolverSaldo(double saldo){
+
+    private double devolverSaldo(double saldo) {
         return saldo;
     }
-    
-    public DTOresumen terminarRenta(Renta renta){
+
+    public DTOresumen terminarRenta(Renta renta) {
         DTOresumen dtoresumen;
-        if (this.construirRespuestaRenta(renta).getCantidad_vueltos()<0)
-            dtoresumen=new DTOresumen("No se puede finalizar la renta");
-        else{
-            dtoresumen=this.construirRespuestaRenta(renta);
+        if (this.construirRespuestaRenta(renta).getCantidad_vueltos() < 0) {
+            dtoresumen = new DTOresumen("No se puede finalizar la renta");
+        } else {
+            dtoresumen = this.construirRespuestaRenta(renta);
             this.devolverSaldo(dtoresumen.getCantidad_vueltos());
         }
         return dtoresumen;
     }
 
-    public Renta consultarRenta(DTO<Renta> dtorenta, Integer entrada3) {
-        try{
-            return this.rentaControl.findRenta(entrada3);
-        }catch (Exception e){
+    public DTOresumen consultarRenta(DTO<Renta> dtorenta, Integer entrada3) {
+        try {
+            dtorenta.setObj(this.rentaControl.findRenta(entrada3));
+            return this.construirRespuestaRenta(dtorenta.getObj());
+        } catch (Exception e) {
             return null;
         }
     }
-    
-    public List<DTO<Carro>> consultarAcumulados(){
-        List<DTO<Carro>> al=new ArrayList<>();
-        for (Renta renta:this.rentaControl.findRentaEntities())
-        {
-            for (Linea l:renta.getLineaCollection()){
+
+    public List<DTO<Carro>> consultarAcumulados() {
+        List<DTO<Carro>> al = new ArrayList<>();
+        for (Renta renta : this.rentaControl.findRentaEntities()) {
+            for (Linea l : renta.getLineaCollection()) {
                 al.add(new DTO<>(l.getCarroid()));
             }
         }

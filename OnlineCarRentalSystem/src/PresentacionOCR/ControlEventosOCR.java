@@ -14,6 +14,7 @@ import EntidadesOCR.classes.DTO;
 import EntidadesOCR.classes.DTOresumen;
 import NegocioOCR.FacadeOCR;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -41,10 +42,10 @@ import static view.trial.llenarDropdownCarros;
  * @author Administrator
  */
 public class ControlEventosOCR {
-
-    private Renta rentaActual;
-    private FacadeOCR facadeocr = new FacadeOCR();
-
+    
+    private static Renta rentaActual;
+    private static FacadeOCR facadeocr = new FacadeOCR();
+    
     @FXML
     private Button nuevaRenta;
     @FXML
@@ -65,7 +66,25 @@ public class ControlEventosOCR {
     private Button agregar_billete;
     @FXML
     private Label saldo_ingresado;
-
+    @FXML
+    private TextField rentaid_texto;
+    @FXML
+    private Button buscarRenta;
+    @FXML
+    private ListView<DTO<Carro>> listacumulados;
+    
+    @FXML
+    private Button consultaracumulados_boton;
+    
+    @FXML
+    void consultarAcumulados(ActionEvent event) {
+        listacumulados.setItems(null);
+        List<DTO<Carro>> ldto = facadeocr.consultarAcumulados();
+        listacumulados.setItems(FXCollections.observableList(ldto));
+        System.out.println(ldto);
+        System.out.println(ldto.size());
+    }
+    
     @FXML
     void addLine(ActionEvent event) {
         DTO<Linea> l = new DTO<Linea>();
@@ -75,17 +94,25 @@ public class ControlEventosOCR {
         l.setObj(the_line);
         facadeocr.agregarLinea(l, Integer.parseInt(cantidadLine.getText()));
         System.out.println("El dto es: " + l + " la coleccion de lineas es: " + rentaActual.getLineaCollection());
-        this.listLine.setItems(FXCollections.observableList(rentaActual.getLineaCollection()));
+        this.showLine();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ControlEventosOCR.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.showCars.setItems(null);
+        this.showCars.setItems(FXCollections.observableList(facadeocr.consultarCarros()));
+        System.out.println(facadeocr.consultarCarros());
         this.showCar();
     }
-
+    
     @FXML
     void deleteLine(ActionEvent event) {
         this.facadeocr.eliminarLinea(new DTO<Linea>(this.listLine.getSelectionModel().getSelectedItem()));
-        this.listLine.setItems(FXCollections.observableList(rentaActual.getLineaCollection()));
+        this.showLine();
         this.showCar();
     }
-
+    
     @FXML
     void agregarBillete(ActionEvent event) {
         DTO<Rentaxbillete> l = new DTO<>();
@@ -95,41 +122,60 @@ public class ControlEventosOCR {
         the_line.setDenominacionbillete(facadeocr.getDenominacion_billeteControl().getEntityManager().find(Denominacionbillete.class, this.denominacion.getSelectionModel().getSelectedItem().getId()));
         l.setObj(the_line);
         DTOresumen dtoresumen = facadeocr.agregarBillete(l);
-        this.listLine.setItems(FXCollections.observableList(rentaActual.getLineaCollection()));
+        this.showLine();
         this.showCar();
         this.saldo_ingresado.setText(String.valueOf(dtoresumen.getSaldo_ingresados()));
     }
-
+    
     @FXML
     private Button terminar_renta;
-
+    
     @FXML
     private Label vueltos_texto;
-
+    
     @FXML
     void terminarRenta(ActionEvent event) {
-        DTOresumen dtoresumen =facadeocr.terminarRenta(rentaActual);
-        this.vueltos_texto.setText(dtoresumen.getCantidad_vueltos());
+        DTOresumen dtoresumen = facadeocr.terminarRenta(rentaActual);
+        if (dtoresumen.getMensaje() != null) {
+            this.vueltos_texto.setText(String.valueOf(dtoresumen.getMensaje()));
+        } else {
+            this.vueltos_texto.setText(String.valueOf(dtoresumen.getCantidad_vueltos()));
+        }
         rentaActual = null;
     }
-
+    
     @FXML
     void nuevaRenta(ActionEvent event) {
         DTO<Renta> dto = new DTO<Renta>();
         DTOresumen dtoresumen = facadeocr.crearRenta(dto);
         rentaActual = dto.getObj();
+        this.showLine();
         this.showCar();
         this.showDenominacion();
     }
-
+    
     private void showCar() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ControlEventosOCR.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.showCars.setItems(null);
         this.showCars.setItems(FXCollections.observableList(facadeocr.consultarCarros()));
+        System.out.println(facadeocr.consultarCarros());
     }
-
+    
     private void showDenominacion() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ControlEventosOCR.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.denominacion.setItems(null);
         this.denominacion.setItems(FXCollections.observableList(facadeocr.consultarTiposBillete()));
+        System.out.println(facadeocr.consultarTiposBillete());
     }
-
+    
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert nuevaRenta != null : "fx:id=\"nuevaRenta\" was not injected: check your FXML file 'PantallaPrincipal.fxml'.";
@@ -139,5 +185,23 @@ public class ControlEventosOCR {
         assert cantidadLine != null : "fx:id=\"cantidadLine\" was not injected: check your FXML file 'PantallaPrincipal.fxml'.";
         assert listLine != null : "fx:id=\"listLine\" was not injected: check your FXML file 'PantallaPrincipal.fxml'.";
         assert deleteLine != null : "fx:id=\"deleteLine\" was not injected: check your FXML file 'PantallaPrincipal.fxml'.";
+    }
+    
+    private void showLine() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ControlEventosOCR.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.listLine.setItems(null);
+        this.listLine.setItems(FXCollections.observableList(rentaActual.getLineaCollection()));
+        System.out.println(rentaActual.getLineaCollection());
+    }
+    
+    @FXML
+    void buscarUnaRenta(ActionEvent event) {
+        DTO<Renta> dtorenta = new DTO<>();
+        DTOresumen dtoresumen = facadeocr.consultarRenta(dtorenta, Integer.valueOf(this.rentaid_texto.getText()));
+        this.rentaid_texto.setText(dtorenta.getObj().toString());
     }
 }
