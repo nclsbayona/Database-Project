@@ -39,4 +39,10 @@ public class DTO <T> {
     public void setTime(LocalDate time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "DTO{" + "obj=" + obj + ", time=" + time + '}';
+    }
+    
 }
