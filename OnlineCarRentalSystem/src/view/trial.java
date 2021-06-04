@@ -13,6 +13,7 @@ import EntidadesOCR.Renta;
 import EntidadesOCR.Rentaxbillete;
 import EntidadesOCR.classes.DTO;
 import EntidadesOCR.classes.DTOresumen;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -61,6 +62,10 @@ public class trial {
             System.out.println("2. Aniadir carro");
             System.out.println("3. Eliminar linea");
             System.out.println("4. Introducir billete");
+            System.out.println("5. Terminar renta");
+            System.out.println("6. Consultar renta");
+            System.out.println("7. Consultar acumulados");
+            
         } else {
             System.out.println("1. Crear renta");
         }
@@ -125,6 +130,7 @@ public class trial {
             }
             case 5:{
                 System.out.println(focr.terminarRenta(renta_actual));
+                renta_actual=null;
                 break;
             }
             case 6:{
@@ -133,6 +139,13 @@ public class trial {
                 entrada = sc.next();
                 entrada3 = Integer.valueOf(entrada);
                 focr.consultarRenta(dtorenta, entrada3);
+                break;
+            }
+            case 7:{
+                List<DTO<Carro>> ldto=focr.consultarAcumulados();
+                System.out.println(ldto);
+                System.out.println(ldto.size());
+                break;
             }
             default: {
                 return false;
