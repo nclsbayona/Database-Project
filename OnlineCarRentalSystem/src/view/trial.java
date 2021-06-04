@@ -56,6 +56,7 @@ public class trial {
     public static boolean imprimirMenu() {
         if (renta_actual != null) {
             System.out.println("La renta actual es " + renta_actual.toString());
+            System.out.println(renta_actual.getLineaCollection());
             System.out.println("2. Aniadir carro");
             System.out.println("3. Eliminar linea");
             System.out.println("7. Aniadir billete");
@@ -90,7 +91,7 @@ public class trial {
             case 3: {
                 DTO<Linea> l = new DTO<>();
                 System.out.println("La lista de lineas:");
-                for (Carro c : focr.consultarCarros()) {
+                for (Linea c : renta_actual.getLineaCollection()) {
                     System.out.println(c);
                 }
                 System.out.println();
@@ -99,6 +100,7 @@ public class trial {
                 entrada2 = Integer.valueOf(entrada);
                 Linea the_line = renta_actual.getLineaCollection().get(entrada2-1);
                 l.setObj(the_line);
+                System.out.println(the_line);
                 System.out.println(focr.eliminarLinea(l));
                 break;
             }

@@ -144,7 +144,9 @@ public class FacadeOCR {
             Linea the_line = this.rentaControl.getLineaFromRenta(l.getObj().getRentaid(), l.getObj().getCarroid().getId());
             Renta the_renta = l.getObj().getRenta();
             if (the_line != null) {
+                the_renta.remove(the_line);
                 this.lineaControl.updateAmountLine(the_line, l.getObj().getCantidad() + the_line.getCantidad());
+                the_renta.add(the_line);
             } else {
                 the_line = l.getObj();
                 try {
