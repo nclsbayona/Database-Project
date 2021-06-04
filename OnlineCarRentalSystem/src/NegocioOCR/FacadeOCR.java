@@ -178,6 +178,7 @@ public class FacadeOCR {
 
     public DTOresumen agregarBillete(DTO<Rentaxbillete> dtorxb) {
         DTOresumen dtoresumen;
+        System.out.println("El simple ID es: "+dtorxb.getObj().getId());
         if (!this.denominacion_billeteControl.denExists(dtorxb.getObj().getId())) {
             dtoresumen = new DTOresumen("No existe la denominacion especificada");
         } else {

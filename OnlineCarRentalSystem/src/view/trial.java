@@ -114,10 +114,12 @@ public class trial {
                 System.out.print("Seleccione cantidad: ");
                 entrada = sc.next();
                 entrada3 = Integer.valueOf(entrada);
+                System.out.println("El valor de entrada2 es: " + entrada2);
                 Rentaxbillete the_line = new Rentaxbillete(renta_actual.getId(), entrada2, entrada3);
                 the_line.setRenta(renta_actual);
                 the_line.setDenominacionbillete(focr.getDenominacion_billeteControl().getEntityManager().find(Denominacionbillete.class, entrada2));
                 l.setObj(the_line);
+                System.out.println("El valor del ID es: " + the_line.getId());
                 System.out.println(focr.agregarBillete(l));
                 break;
             }
