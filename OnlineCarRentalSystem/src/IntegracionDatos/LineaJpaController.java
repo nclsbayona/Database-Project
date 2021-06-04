@@ -212,13 +212,17 @@ public class LineaJpaController implements Serializable {
         }
     }
 
-    public void updateLine(Linea the_line, int num) {
+    public void updateAmountLine(Linea the_line, int num) {
         the_line.setCantidad(num);
         try {
             this.edit(the_line);
         } catch (Exception ex) {
             Logger.getLogger(LineaJpaController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public boolean buscarLineaDeRenta(Linea obj) {
+        return getEntityManager().find(Linea.class, obj.getId())!=null;
     }
 
 }

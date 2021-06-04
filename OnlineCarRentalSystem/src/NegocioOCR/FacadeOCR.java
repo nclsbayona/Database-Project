@@ -19,14 +19,15 @@ import IntegracionDatos.LineaJpaController;
 import IntegracionDatos.ParametroJpaController;
 import IntegracionDatos.RentaJpaController;
 import IntegracionDatos.RentaxbilleteJpaController;
+import IntegracionDatos.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -92,8 +93,16 @@ public class FacadeOCR {
         Integer cant;
         EntityManager em = this.carroControl.getEntityManager();
         Query query = em.createNativeQuery("SELECT COUNT(*) FROM CARRO");
-        System.out.print(query);
         cant = (Integer) query.getSingleResult();
+        return cant;
+    }
+
+    public Carro consultarCarro(Integer id) {
+        Carro cant;
+        EntityManager em = this.carroControl.getEntityManager();
+        Query query = em.createNativeQuery("SELECT * FROM CARRO WHERE ID=?", Carro.class);
+        query.setParameter(1, id);
+        cant = (Carro) query.getSingleResult();
         return cant;
     }
 
@@ -125,87 +134,81 @@ public class FacadeOCR {
         return dtoresumen;
     }
 
-    public DTOresumen agregarLinea(DTO<Linea> l) {
+    public DTOresumen agregarLinea(DTO<Linea> l, Integer cantidad) {
         DTOresumen dtoresumen = null;
         if (!this.carroControl.carExists(l.getObj().getCarroid().getId())) {
             dtoresumen = new DTOresumen("No existe este carro en el catalogo");
-        } else if (!this.carroControl.carAvailable(l.getObj().getCarroid().getId())) {
+        } else if (!this.carroControl.carAvailable(l.getObj().getCarroid().getId(), cantidad)) {
             dtoresumen = new DTOresumen("No existen unidades de este carro disponibles en el catalogo");
         } else {
-            Query query;
-            query = (this.rentaControl.getEntityManager().createNativeQuery("SELECT * FROM RENTA WHERE ID=?", Renta.class));
-            query.setParameter(1, (l.getObj().getRentaid()));
-            Renta the_renta = (Renta) (query.getSingleResult());
-            //Aqui se mira si existe una renta ya del mismo carro y eso
-            Query query2;
-            query2 = (this.lineaControl.getEntityManager().createNativeQuery("SELECT * FROM LINEA WHERE CARROID=? AND RENTAID=?", Linea.class));
-            query2.setParameter(1, (l.getObj().getCarroid().getId()));
-            query2.setParameter(2, l.getObj().getRentaid());
-            Query query3 = (this.parametroControl.getEntityManager().createNativeQuery("SELECT P.CANTIDAD_CARROS FROM PARAMETRO P, RENTA R WHERE R.ID=? AND R.PARAMETROID=P.ID"));
-            query3.setParameter(1, l.getObj().getRentaid());
-            int parametro_cars_number = (int) (query3.getSingleResult());
-            Query query4 = (this.parametroControl.getEntityManager().createNativeQuery("SELECT P.PORCENTAJE FROM PARAMETRO P, RENTA R WHERE R.ID=? AND R.PARAMETROID=P.ID"));
-            query4.setParameter(1, l.getObj().getRentaid());
-            int porcentaje_descuento_cars = (int) (query4.getSingleResult());
-            int cantidad_rentados;
-            Linea the_line = null;
-            try {
-                the_line = (Linea) (query2.getSingleResult());
-            } catch (NoResultException ne) {
-            }
+            Linea the_line = this.rentaControl.getLineaFromRenta(l.getObj().getRentaid(), l.getObj().getCarroid().getId());
+            Renta the_renta = l.getObj().getRenta();
             if (the_line != null) {
-                try {
-                    this.lineaControl.updateLine(the_line, the_line.getCantidad() + l.getObj().getCantidad());
-                    double total_renta = 0;
-                    double total_ingresado = 0;
-                    double saldo_vueltos;
-                    cantidad_rentados = the_renta.getLineaCollection().size();
-                    the_renta = (Renta) (query.getSingleResult());
-                    for (Iterator<Linea> it = the_renta.getLineaCollection().iterator(); it.hasNext();) {
-                        Linea line = it.next();
-                        int tmp = (line.getCantidad() * this.carroControl.consultarPrecioCarro(line.getCarroid().getId())) * ((100) - ((cantidad_rentados % parametro_cars_number) * (porcentaje_descuento_cars)));
-                        total_renta = total_renta + tmp;
-                    }
-                    for (Iterator<Rentaxbillete> it = the_renta.getRentaxbilleteCollection().iterator(); it.hasNext();) {
-                        Rentaxbillete billeteIngresado = it.next();
-                        total_ingresado += (billeteIngresado.getCantidad() * billeteIngresado.getDenominacionbillete().getValor());
-                    }
-                    saldo_vueltos = total_ingresado - total_renta;
-                    dtoresumen = new DTOresumen(the_renta.getLineaCollection(), total_renta, total_ingresado, saldo_vueltos);
-                    System.out.println(this.consultarCarros());
-                } catch (Exception ex) {
-                    Logger.getLogger(FacadeOCR.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                this.lineaControl.updateAmountLine(the_line, l.getObj().getCantidad() + the_line.getCantidad());
             } else {
+                the_line = l.getObj();
                 try {
-                    double total_renta = 0;
-                    double total_ingresado = 0;
-                    double saldo_vueltos;
-                    Linea linea = l.getObj();
-                    linea.setRenta(the_renta);
-                    this.lineaControl.create(linea);
-                    l.setObj(linea);
-                    the_renta.add(linea);
-                    cantidad_rentados = the_renta.getLineaCollection().size();
-                    for (Linea line : this.rentaControl.getLineaCollection(the_renta.getId())) {
-                        int tmp = (line.getCantidad() * this.carroControl.consultarPrecioCarro(line.getCarroid().getId())) * ((100) - ((cantidad_rentados % parametro_cars_number) * (porcentaje_descuento_cars)));
-                        total_renta = total_renta + tmp;
-                    }
-                    for (Iterator<Rentaxbillete> it = the_renta.getRentaxbilleteCollection().iterator(); it.hasNext();) {
-                        Rentaxbillete billeteIngresado = it.next();
-                        total_ingresado += (billeteIngresado.getCantidad() * billeteIngresado.getDenominacionbillete().getValor());
-                    }
-                    saldo_vueltos = total_ingresado - total_renta;
-                    dtoresumen = new DTOresumen(the_renta.getLineaCollection(), total_renta, total_ingresado, saldo_vueltos);
+                    this.lineaControl.create(the_line);
+                    the_renta.add(the_line);
                 } catch (Exception e) {
-                    dtoresumen = new DTOresumen("Ha ocurrido un error, por favor intente nuevamente");
                 }
             }
+            double saldo_total_renta = 0;
+            for (Iterator<Linea> it = this.rentaControl.getLineaCollection(the_renta.getId()).iterator(); it.hasNext();) {
+                Linea linea = it.next();
+                saldo_total_renta +=(linea.getCantidad() * this.carroControl.consultarPrecioCarro(linea.getCarroid().getId()));
+            }
+            double saldo_ingresados = 0;
+            for (Rentaxbillete linea : the_renta.getRentaxbilleteCollection()) {
+                saldo_ingresados = saldo_ingresados + (linea.getDenominacionbillete().getValor() * linea.getCantidad());
+            }
+            double vueltos = saldo_ingresados-saldo_total_renta;
+            Pair<Integer, Integer> the_pair = this.parametroControl.returnParametroInfo(l.getObj().getRentaid());
+            int cantidad_rentados = 0;
+            for (Linea linea : this.rentaControl.getLineaCollection(the_renta.getId())) {
+                cantidad_rentados += linea.getCantidad();
+            }
+            saldo_total_renta = saldo_total_renta * ((((100 - (the_pair.getValue() * ((int)(cantidad_rentados / the_pair.getKey()))))) / 100));
+            dtoresumen = new DTOresumen(the_renta.getLineaCollection(), saldo_total_renta, saldo_ingresados, vueltos);
         }
         return dtoresumen;
     }
 
     public void agregarBillete(DTO<Rentaxbillete> dtorxb) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public DTOresumen eliminarLinea(DTO<Linea> l) {
+        DTOresumen dtoresumen;
+        if (l.getObj()==null)
+            dtoresumen=new DTOresumen("La linea esta vacía");
+        else if (!this.lineaControl.buscarLineaDeRenta(l.getObj()))
+            dtoresumen=new DTOresumen("La linea no existe");
+        else{
+            try {
+                this.lineaControl.destroy(l.getObj().getLineaPK());
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(FacadeOCR.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Renta the_renta=l.getObj().getRenta();
+            double saldo_total_renta = 0;
+            for (Iterator<Linea> it = this.rentaControl.getLineaCollection(the_renta.getId()).iterator(); it.hasNext();) {
+                Linea linea = it.next();
+                saldo_total_renta +=(linea.getCantidad() * this.carroControl.consultarPrecioCarro(linea.getCarroid().getId()));
+            }
+            double saldo_ingresados = 0;
+            for (Rentaxbillete linea : the_renta.getRentaxbilleteCollection()) {
+                saldo_ingresados = saldo_ingresados + (linea.getDenominacionbillete().getValor() * linea.getCantidad());
+            }
+            double vueltos = saldo_ingresados-saldo_total_renta;
+            Pair<Integer, Integer> the_pair = this.parametroControl.returnParametroInfo(l.getObj().getRentaid());
+            int cantidad_rentados = 0;
+            for (Linea linea : this.rentaControl.getLineaCollection(the_renta.getId())) {
+                cantidad_rentados += linea.getCantidad();
+            }
+            saldo_total_renta = saldo_total_renta * ((((100 - (the_pair.getValue() * ((int)(cantidad_rentados / the_pair.getKey()))))) / 100));
+            dtoresumen = new DTOresumen(the_renta.getLineaCollection(), saldo_total_renta, saldo_ingresados, vueltos);
+        }
+        return dtoresumen;
     }
 }

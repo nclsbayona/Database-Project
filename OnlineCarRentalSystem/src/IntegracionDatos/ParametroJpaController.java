@@ -17,6 +17,7 @@ import IntegracionDatos.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javafx.util.Pair;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -32,8 +33,19 @@ public class ParametroJpaController implements Serializable {
     }
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("OnlineCarRentalPU");
 
+    public Pair<Integer, Integer> returnParametroInfo(Integer rentaid) {
+        Query query3 = (getEntityManager().createNativeQuery("SELECT P.CANTIDAD_CARROS FROM PARAMETRO P, RENTA R WHERE R.ID=? AND R.PARAMETROID=P.ID"));
+        query3.setParameter(1, rentaid);
+        Integer parametro_cars_number = (Integer) (query3.getSingleResult());
+        Query query4 = (getEntityManager().createNativeQuery("SELECT P.PORCENTAJE FROM PARAMETRO P, RENTA R WHERE R.ID=? AND R.PARAMETROID=P.ID"));
+        query4.setParameter(1, rentaid);
+        Integer porcentaje_descuento_cars = (Integer) (query4.getSingleResult());
+        Pair<Integer, Integer> the_pair = new Pair<Integer, Integer>(parametro_cars_number, porcentaje_descuento_cars);
+        return the_pair;
+    }
+
     public ParametroJpaController() {
-       }
+    }
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -204,5 +216,5 @@ public class ParametroJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }

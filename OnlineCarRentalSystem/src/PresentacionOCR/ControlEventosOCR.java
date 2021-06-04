@@ -89,9 +89,9 @@ public class ControlEventosOCR {
         } else {
             Linea l = new Linea(c, this.rentaActual.getId(), 1);
             DTO<Linea> dtol = new DTO<>(l);
-            DTOresumen dtoresumen = this.facadeocr.agregarLinea(dtol);
+            /*DTOresumen dtoresumen = this.facadeocr.agregarLinea(dtol);
             this.createNewStageDone("Exito!");
-            this.crearDtoResumenReview(dtoresumen);
+            this.crearDtoResumenReview(dtoresumen);*/
         }
         this.updateCarList();
     }

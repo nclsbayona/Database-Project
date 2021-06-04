@@ -5,6 +5,7 @@
  */
 package IntegracionDatos;
 
+import EntidadesOCR.Carro;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -18,6 +19,7 @@ import EntidadesOCR.Linea;
 import EntidadesOCR.Renta;
 import IntegracionDatos.exceptions.IllegalOrphanException;
 import IntegracionDatos.exceptions.NonexistentEntityException;
+import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -287,10 +289,33 @@ public class RentaJpaController implements Serializable {
         }
     }
 
-    public ArrayList getLineaCollection(Integer id) {
-        Query query=getEntityManager().createNativeQuery("SELECT L.* FROM LINEA L, RENTA R WHERE R.ID=? AND R.ID=L.RENTAID", Linea.class);
+    public List<Linea> getLineaCollection(Integer id) {
+        Query query = getEntityManager().createNativeQuery("SELECT L.* FROM LINEA L, RENTA R WHERE R.ID=? AND R.ID=L.RENTAID", Linea.class);
         query.setParameter(1, id);
-        return (ArrayList) query.getResultList();
+        List<Linea> al =query.getResultList();
+        if (al == null) {
+            al = new ArrayList<>();
+        }
+        return al;
     }
 
+    public boolean rentaContainsLine(Integer rentaid, Integer carroid) {
+        Query query;
+        query = (getEntityManager().createNativeQuery("SELECT COUNT(*) FROM LINEA WHERE RENTAID=? AND CARROID=?"));
+        query.setParameter(1, rentaid);
+        query.setParameter(2, carroid);
+        return ((Integer) (query.getSingleResult())) > 0;
+    }
+
+    public Linea getLineaFromRenta(Integer rentaid, Integer carroid) {
+        Query query;
+        query = (getEntityManager().createNativeQuery("SELECT * FROM LINEA WHERE RENTAID=? AND CARROID=?", Linea.class));
+        query.setParameter(1, rentaid);
+        query.setParameter(2, carroid);
+        try {
+            return ((Linea) (query.getSingleResult()));
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

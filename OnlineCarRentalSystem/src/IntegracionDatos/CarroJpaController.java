@@ -206,14 +206,15 @@ public class CarroJpaController implements Serializable {
     }
 
     public boolean carExists(Integer id) {
-        return getEntityManager().find (Carro.class, id)!=null;
+        return getEntityManager().find(Carro.class, id) != null;
     }
 
-    public boolean carAvailable(Integer id) {
-        return getEntityManager().find (Carro.class, id).getUnidadesdisponibles()>0;
+    public boolean carAvailable(Integer id, Integer cantidad) {
+        return getEntityManager().find(Carro.class, id).getUnidadesdisponibles() >= cantidad;
     }
-    
-    public int consultarPrecioCarro(Integer id){
-        return getEntityManager().find (Carro.class, id).getPrecio();
+
+    public Integer consultarPrecioCarro(Integer id) {
+        Integer precio=getEntityManager().find(Carro.class, id).getPrecio();
+        return precio;
     }
 }
