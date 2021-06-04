@@ -119,7 +119,7 @@ public class trial {
                 the_line.setRenta(renta_actual);
                 the_line.setDenominacionbillete(focr.getDenominacion_billeteControl().getEntityManager().find(Denominacionbillete.class, entrada2));
                 l.setObj(the_line);
-                System.out.println("El valor del ID es: " + the_line.getId());
+                System.out.println("El valor del ID es: " + the_line.getDenominacionbilleteid());
                 System.out.println(focr.agregarBillete(l));
                 break;
             }
